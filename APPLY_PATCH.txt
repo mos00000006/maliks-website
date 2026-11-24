@@ -1,5 +1,12 @@
-MALIKS WEBSITE TEAM AND STORE LOCATOR PATCH
+MALIKS WEBSITE PATCH — TEAM, STORE LOCATOR, AND BRAND MARQUEE
 
-Extract index.html, styles.css, and app.js into the root folder of the website repository and replace the existing files.
+Replace the website repository root files with index.html, styles.css, and app.js from this patch.
 
-The patch removes the “Here to help” callout, keeps the four circular team portraits embedded in index.html, and adds a searchable locator for the 14 supplied PowerBuild branches. The locator includes opening hours, More information panels, clickable phone numbers, Google Maps directions, and an interactive map focused on the listed Gauteng branch areas. The map uses OpenStreetMap tiles; directions links open the full address supplied for each branch.
+Included updates:
+- Keeps the corrected four-person team section and circular portraits; removes the “Here to help” callout.
+- Adds the searchable locator for the 14 supplied PowerBuild branches, including branch contact details, directions, Gauteng map pins, and “More information” hours.
+- Sets opening hours to Monday–Thursday 08:00–17:00, Friday 08:00–17:00 with a 12:00–14:00 closure, Saturday and public holidays 08:00–13:00, and Sunday 08:00–12:00.
+- Keeps Leaflet map tiles and pins below the sticky site header and blue navigation.
+- Replaces the static client logo row with an infinite, auto-sliding marquee containing all 13 supplied logos. The images are embedded in index.html so no separate logo upload or external logo URL is needed. The marquee pauses on hover and respects reduced-motion preferences.
+
+The map uses OpenStreetMap tiles; branch direction links open Google Maps using the supplied branch addresses.
