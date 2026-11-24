@@ -7,6 +7,7 @@
     <meta name="description" content="Explore the Maliks Paint and Hardware catalogue powered by PowerBuild." />
     <title>Maliks Paint and Hardware | Catalogue</title>
     <link rel="icon" type="image/png" href="powerbuild-logo.png" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -291,66 +292,348 @@
             </div>
             <a class="button button-primary" href="#store-list">Find a store</a>
           </div>
+          <div class="store-overview">
+            <div class="store-map-panel">
+              <div class="store-map-caption"><span>Our branch network</span><strong>Gauteng, South Africa</strong></div>
+              <div id="branchMap" aria-label="Map showing the 14 PowerBuild branches listed below">
+                <p class="map-fallback">Map pins show the PowerBuild branches listed below. Use a branch card for directions.</p>
+              </div>
+            </div>
+            <aside class="store-hours-card" aria-labelledby="storeHoursTitle">
+              <p class="eyebrow">Trading Hours</p>
+              <h3 id="storeHoursTitle">Opening Hours</h3>
+              <table class="hours-table">
+                <tbody>
+                  <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                  <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                  <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                  <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                  <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                  <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                  <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                  <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                </tbody>
+              </table>
+            </aside>
+          </div>
+          <div class="store-benefits" aria-label="Why shop at PowerBuild">
+            <article class="store-benefit"><span class="store-benefit-mark" aria-hidden="true">✓</span><div><h3>Quality tools</h3><p>Trusted brands you can rely on.</p></div></article>
+            <article class="store-benefit"><span class="store-benefit-mark" aria-hidden="true">✦</span><div><h3>Expert advice</h3><p>Real people. Real solutions.</p></div></article>
+            <article class="store-benefit"><span class="store-benefit-mark" aria-hidden="true">★</span><div><h3>Best prices</h3><p>Great value on every purchase.</p></div></article>
+            <article class="store-benefit"><span class="store-benefit-mark" aria-hidden="true">14</span><div><h3>Local branches</h3><p>Find a PowerBuild store near your project.</p></div></article>
+          </div>
           <div class="store-list" id="store-list">
             <label class="store-search-label" for="storeSearch">Search our branches</label>
             <input class="store-search-input" id="storeSearch" type="search" autocomplete="off" placeholder="Enter a branch, town or suburb" />
             <p class="store-results" id="storeResults" role="status" aria-live="polite">14 branches</p>
             <div class="store-grid" id="storeGrid">
-              <article class="store-card" data-search="powerbuild chamdor jacob street krugersdorp 1766">
+              <article class="store-card" data-search="powerbuild chamdor jacob street krugersdorp 1766" data-lat="-26.1324" data-lng="27.7935">
                 <h3>PowerBuild Chamdor</h3><address>16 Jacob St, Chamdor, Krugersdorp, 1766</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0117628051">011 762 8051</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Chamdor%2C+16+Jacob+St%2C+Krugersdorp+1766" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild randfontein randwest city main reef road 1754">
+              <article class="store-card" data-search="powerbuild randfontein randwest city main reef road 1754" data-lat="-26.1842" data-lng="27.702">
                 <h3>PowerBuild Randfontein</h3><address>Randwest City, 97 Main Reef Rd, Randfontein, 1754</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0114121030">011 412 1030</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Randfontein%2C+Randwest+City%2C+97+Main+Reef+Rd%2C+Randfontein+1754" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild kagiso mall kagiso avenue krugersdorp 1754">
+              <article class="store-card" data-search="powerbuild kagiso mall kagiso avenue krugersdorp 1754" data-lat="-26.1784" data-lng="27.7952">
                 <h3>PowerBuild Kagiso Mall</h3><address>Kagiso Ave, Kagiso, Krugersdorp, 1754</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0114102751">011 410 2751</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Kagiso+Mall%2C+Kagiso+Ave%2C+Kagiso%2C+Krugersdorp+1754" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild krugersdorp adolf schneider avenue krugersdorp north 1739">
+              <article class="store-card" data-search="powerbuild krugersdorp adolf schneider avenue krugersdorp north 1739" data-lat="-26.0922" data-lng="27.7752">
                 <h3>PowerBuild Krugersdorp</h3><address>21 Adolf Schneider Ave, Krugersdorp North, 1739</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0100169413">010 016 9413</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Krugersdorp%2C+21+Adolf+Schneider+Ave%2C+Krugersdorp+North+1739" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild sungate ventersdorp road elandsvlei randfontein">
+              <article class="store-card" data-search="powerbuild sungate ventersdorp road elandsvlei randfontein" data-lat="-26.2732" data-lng="27.6385">
                 <h3>PowerBuild Sungate</h3><address>295 Ventersdorp Rd, Elandsvlei, Randfontein</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0100173620">010 017 3620</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Sungate%2C+295+Ventersdorp+Rd%2C+Elandsvlei%2C+Randfontein" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild azaadville taj mahal street krugersdorp 1754">
+              <article class="store-card" data-search="powerbuild azaadville taj mahal street krugersdorp 1754" data-lat="-26.2115" data-lng="27.709">
                 <h3>PowerBuild Azaadville</h3><address>6 Taj Mahal St, Azaadville, Krugersdorp, 1754</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0114133283">011 413 3283</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Azaadville%2C+6+Taj+Mahal+St%2C+Azaadville%2C+Krugersdorp+1754" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild lanseria hetford junction shopping centre r512 malibongwe palendaba drive">
+              <article class="store-card" data-search="powerbuild lanseria hetford junction shopping centre r512 malibongwe palendaba drive" data-lat="-25.9341" data-lng="27.9273">
                 <h3>PowerBuild Lanseria</h3><address>Shop 1, Hetford Junction Shopping Centre, R512 Malibongwe, Palendaba Drive, Lanseria</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0117628051">011 762 8051</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Lanseria%2C+Hetford+Junction+Shopping+Centre%2C+R512+Malibongwe%2C+Palendaba+Drive%2C+Lanseria" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild munsiville moncla street krugersdorp 1775">
+              <article class="store-card" data-search="powerbuild munsiville moncla street krugersdorp 1775" data-lat="-26.1268" data-lng="27.7827">
                 <h3>PowerBuild Munsiville</h3><address>1596 Moncla St, Munsiville, Krugersdorp, 1775</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0105916846">010 591 6846</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Munsiville%2C+1596+Moncla+St%2C+Munsiville%2C+Krugersdorp+1775" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild mohlakeng ntuli street randfontein 1766">
+              <article class="store-card" data-search="powerbuild mohlakeng ntuli street randfontein 1766" data-lat="-26.1795" data-lng="27.6973">
                 <h3>PowerBuild Mohlakeng</h3><address>2483 Ntuli St, Mohlakeng, Randfontein, 1766</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0114147033">011 414 7033</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Mohlakeng%2C+2483+Ntuli+St%2C+Mohlakeng%2C+Randfontein+1766" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild midway kalinade street chiawelo soweto 1818">
+              <article class="store-card" data-search="powerbuild midway kalinade street chiawelo soweto 1818" data-lat="-26.2787" data-lng="27.8702">
                 <h3>PowerBuild Midway</h3><address>6517 Kalinade St, Chiawelo, Soweto, 1818</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0104476598">010 447 6598</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Midway%2C+6517+Kalinade+St%2C+Chiawelo%2C+Soweto+1818" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild carletonville van zyn smith street">
+              <article class="store-card" data-search="powerbuild carletonville van zyn smith street" data-lat="-26.3603" data-lng="27.3974">
                 <h3>PowerBuild Carletonville</h3><address>44 Van Zyn Smith Street, Carletonville</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0832715119">083 271 5119</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Carletonville%2C+44+Van+Zyn+Smith+Street%2C+Carletonville" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild jackal creek boundary slovenia street">
+              <article class="store-card" data-search="powerbuild jackal creek boundary slovenia street" data-lat="-25.9895" data-lng="27.9595">
                 <h3>PowerBuild Jackal Creek</h3><address>Cnr Boundary and Slovenia Street</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0684785359">068 478 5359</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Jackal+Creek%2C+Boundary+and+Slovenia+Street" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild cosmo city shopping centre south africa drive central">
+              <article class="store-card" data-search="powerbuild cosmo city shopping centre south africa drive central" data-lat="-25.928" data-lng="27.9133">
                 <h3>PowerBuild Cosmo City</h3><address>Shop 28, Cosmo City Shopping Centre, corner South Africa Drive and Central</address>
                 <div class="store-card-actions"><a class="store-phone" href="tel:0849742052">084 974 2052</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Cosmo+City%2C+Shop+28+Cosmo+City+Shopping+Centre%2C+South+Africa+Drive+and+Central" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
-              <article class="store-card" data-search="powerbuild roodeport station street 1724">
+              <article class="store-card" data-search="powerbuild roodeport station street 1724" data-lat="-26.1625" data-lng="27.8731">
                 <h3>PowerBuild Roodeport</h3><address>1 Station St, Roodeport, 1724</address>
-                <div class="store-card-actions"><a class="store-phone" href="tel:07889336101">078 893 36101</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Roodeport%2C+1+Station+St%2C+Roodeport+1724" target="_blank" rel="noopener">Directions</a></div>
+                <div class="store-card-actions"><a class="store-phone" href="tel:0788933610">078 893 3610</a><a class="store-directions" href="https://www.google.com/maps/search/?api=1&amp;query=PowerBuild+Roodeport%2C+1+Station+St%2C+Roodeport+1724" target="_blank" rel="noopener">Directions</a></div>
+              
+                <details class="store-more">
+                  <summary>More information</summary>
+                  <div class="store-more-content">
+                    <h4>Opening Hours</h4>
+                    <table class="hours-table hours-table-compact"><tbody>
+                      <tr><th scope="row">Monday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Tuesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Wednesday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Thursday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Friday</th><td>08:00 - 17:00</td></tr>
+                      <tr><th scope="row">Saturday</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Public holidays</th><td>08:00 - 13:00</td></tr>
+                      <tr><th scope="row">Sunday</th><td>Closed</td></tr>
+                    </tbody></table>
+                    <p>Call the branch to check stock availability and delivery arrangements.</p>
+                  </div>
+                </details>
               </article>
             </div>
             <p class="store-empty" id="storeEmpty" hidden>No branches match that search. Try another branch or area.</p>
@@ -387,6 +670,7 @@
 
     <div class="print-sheet" id="printSheet"><div class="print-brand"><img src="powerbuild-logo.png" alt="PowerBuild" /><div><h1>Maliks Paint and Hardware</h1><p>Project quote list</p></div></div><p class="print-date" id="printDate"></p><div id="printLines"></div><p class="print-note">Prices, quantities and availability to be confirmed with the Maliks team.</p></div>
 
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin="" defer></script>
     <script src="app.js" defer></script>
   </body>
 </html>

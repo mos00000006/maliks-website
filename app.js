@@ -543,6 +543,51 @@ function printQuoteList() {
   window.print();
 }
 
+function initBranchMap() {
+  const mapElement = document.querySelector("#branchMap");
+  if (!mapElement) return;
+  if (!window.L) {
+    const fallback = mapElement.querySelector(".map-fallback");
+    if (fallback) fallback.textContent = "The map is unavailable right now. Search the branch list below to open directions.";
+    return;
+  }
+
+  const cards = $all(".store-card");
+  if (!cards.length) return;
+  mapElement.innerHTML = "";
+  const map = window.L.map(mapElement, { scrollWheelZoom: false, tap: true });
+  window.L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    maxZoom: 18,
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>',
+  }).addTo(map);
+
+  const bounds = [];
+  cards.forEach((card, index) => {
+    const lat = Number(card.dataset.lat);
+    const lng = Number(card.dataset.lng);
+    if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    const name = card.querySelector("h3")?.textContent.trim() || "PowerBuild branch";
+    const address = card.querySelector("address")?.textContent.trim() || "";
+    const phone = card.querySelector(".store-phone");
+    const directions = card.querySelector(".store-directions");
+    const icon = window.L.divIcon({
+      className: "branch-pin-icon",
+      html: `<span class="branch-map-pin"><b>${index + 1}</b></span>`,
+      iconSize: [30, 34],
+      iconAnchor: [15, 32],
+      popupAnchor: [0, -30],
+    });
+    const phoneLink = phone ? `<a href="${escapeHtml(phone.getAttribute("href"))}">${escapeHtml(phone.textContent.trim())}</a>` : "";
+    const directionsLink = directions ? `<a href="${escapeHtml(directions.href)}" target="_blank" rel="noopener">Open directions</a>` : "";
+    const popup = `<div class="branch-map-popup"><strong>${escapeHtml(name)}</strong><span>${escapeHtml(address)}</span><span>${phoneLink}</span>${directionsLink}</div>`;
+    window.L.marker([lat, lng], { icon, title: name, alt: name }).addTo(map).bindPopup(popup);
+    bounds.push([lat, lng]);
+  });
+
+  if (bounds.length) map.fitBounds(bounds, { padding: [28, 28], maxZoom: 11 });
+  window.setTimeout(() => map.invalidateSize(), 120);
+}
+
 function toggleDepartmentMenu() {
   const button = $("#departmentToggle");
   const menu = $("#departmentMenu");
@@ -659,6 +704,7 @@ function init() {
   hydrateStaticIcons();
   readUrlState();
   state.quote = loadSavedQuote();
+  initBranchMap();
   bindEvents();
   loadProducts();
 }

@@ -247,6 +247,35 @@ img { max-width: 100%; display: block; }
 .store-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; }
 .store-heading .section-lede { max-width: 680px; margin: 15px 0 0; color: var(--muted); font-size: 16px; line-height: 1.65; }
 .store-heading > .button { flex: 0 0 auto; margin-bottom: 2px; }
+.store-overview { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(310px, .8fr); gap: 18px; margin-top: 32px; }
+.store-map-panel { min-width: 0; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-md); background: #edf2f5; box-shadow: var(--shadow-sm); }
+.store-map-caption { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 13px 18px; background: var(--blue-950); color: var(--white); }
+.store-map-caption span { color: rgba(255,255,255,.78); font-size: 12px; font-weight: 750; }
+.store-map-caption strong { color: var(--yellow); font-size: 13px; font-weight: 900; }
+#branchMap { position: relative; height: 390px; background: #e9eef1; }
+.map-fallback { position: absolute; inset: 0; display: grid; place-items: center; margin: 0; padding: 24px; color: var(--muted); font-size: 14px; text-align: center; }
+.branch-pin-icon { border: 0; background: transparent; }
+.branch-map-pin { display: grid; width: 30px; height: 30px; place-items: center; border: 2px solid var(--white); border-radius: 50% 50% 50% 0; background: var(--blue-700); box-shadow: 0 3px 8px rgba(4,28,53,.35); color: var(--white); transform: rotate(-45deg); }
+.branch-map-pin b { font-size: 10px; line-height: 1; transform: rotate(45deg); }
+.branch-map-popup { display: grid; gap: 5px; min-width: 170px; }
+.branch-map-popup strong { color: var(--blue-950); font-size: 14px; }
+.branch-map-popup span { color: var(--muted); font-size: 12px; line-height: 1.4; }
+.branch-map-popup a { color: var(--blue-700); font-size: 12px; font-weight: 800; }
+.leaflet-container { color: var(--ink); font-family: inherit; }
+.store-hours-card { padding: 25px 25px 20px; border-radius: var(--radius-md); background: linear-gradient(150deg, var(--blue-950), var(--blue-700)); color: var(--white); box-shadow: var(--shadow-sm); }
+.store-hours-card .eyebrow { margin-bottom: 8px; color: var(--yellow); }
+.store-hours-card h3 { margin: 0; color: var(--white); font-size: 25px; line-height: 1.15; }
+.hours-table { width: 100%; margin-top: 14px; border-collapse: collapse; color: inherit; font-size: 13px; }
+.hours-table th, .hours-table td { padding: 6px 0; border-bottom: 1px solid rgba(255,255,255,.15); }
+.hours-table th { color: rgba(255,255,255,.88); font-weight: 700; text-align: left; }
+.hours-table td { color: var(--white); font-weight: 800; text-align: right; white-space: nowrap; }
+.hours-table tr:last-child th, .hours-table tr:last-child td { border-bottom: 0; }
+.store-benefits { display: grid; grid-template-columns: repeat(4, minmax(0,1fr)); margin-top: 18px; overflow: hidden; border: 1px solid var(--line); border-radius: var(--radius-md); background: #f7f8f9; }
+.store-benefit { min-width: 0; display: flex; align-items: center; gap: 14px; padding: 20px; border-right: 1px solid var(--line); }
+.store-benefit:last-child { border-right: 0; }
+.store-benefit-mark { flex: 0 0 auto; display: grid; width: 36px; height: 36px; place-items: center; border: 2px solid var(--blue-950); border-radius: 50%; color: var(--blue-950); font-size: 16px; font-weight: 900; }
+.store-benefit h3 { margin: 0; color: var(--blue-950); font-size: 12px; font-weight: 900; letter-spacing: .04em; text-transform: uppercase; }
+.store-benefit p { margin: 4px 0 0; color: var(--muted); font-size: 12px; line-height: 1.45; }
 .store-list { margin-top: 34px; scroll-margin-top: 150px; }
 .store-search-label { display: block; margin-bottom: 8px; color: var(--blue-950); font-size: 13px; font-weight: 850; }
 .store-search-input { width: min(100%, 520px); height: 50px; padding: 0 16px; border: 1px solid var(--line); border-radius: 12px; outline: 0; background: var(--soft); color: var(--ink); transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
@@ -262,6 +291,18 @@ img { max-width: 100%; display: block; }
 .store-phone { color: var(--blue-700); font-size: 14px; font-weight: 850; }
 .store-phone:hover, .store-directions:hover { color: var(--blue-950); }
 .store-directions { display: inline-flex; align-items: center; min-height: 36px; padding: 0 13px; border-radius: 9px; background: var(--blue-950); color: var(--white); font-size: 12px; font-weight: 850; }
+.store-more { margin-top: 15px; padding-top: 10px; border-top: 1px solid var(--line); }
+.store-more summary { display: inline-flex; align-items: center; gap: 8px; color: var(--blue-700); font-size: 13px; font-weight: 850; cursor: pointer; list-style: none; }
+.store-more summary::-webkit-details-marker { display: none; }
+.store-more summary::after { content: "+"; display: inline-grid; width: 18px; height: 18px; place-items: center; border-radius: 50%; background: var(--blue-100); color: var(--blue-950); font-size: 15px; line-height: 1; }
+.store-more[open] summary::after { content: "−"; }
+.store-more-content { padding: 12px 0 2px; }
+.store-more-content h4 { margin: 0 0 5px; color: var(--blue-950); font-size: 13px; }
+.store-more-content .hours-table { margin-top: 0; color: var(--ink); font-size: 12px; }
+.store-more-content .hours-table th, .store-more-content .hours-table td { padding: 5px 0; border-color: var(--line); color: var(--ink); }
+.store-more-content .hours-table th { font-weight: 650; }
+.store-more-content .hours-table td { font-weight: 750; }
+.store-more-content p { margin: 9px 0 0; color: var(--muted); font-size: 12px; line-height: 1.5; }
 .store-empty { margin: 18px 0 0; padding: 20px; border-radius: 12px; background: var(--soft); color: var(--muted); text-align: center; }
 
 .centered-heading { display: grid; justify-items: center; text-align: center; }
@@ -551,6 +592,11 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .team-grid { gap: 14px; }
   .team-card-copy { padding: 18px 17px 21px; }
   .team-card h3 { font-size: 19px; }
+  .store-overview { grid-template-columns: 1fr; }
+  #branchMap { height: 360px; }
+  .store-benefits { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .store-benefit:nth-child(2) { border-right: 0; }
+  .store-benefit:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
   .client-logo-track { grid-template-columns: repeat(4, minmax(0,1fr)); }
   .achievement-section.commitment-section { padding: 62px 0; }
   .achievement-grid { grid-template-columns: repeat(2, minmax(0,1fr)); min-height: 0; }
@@ -602,6 +648,11 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .team-card { display: grid; grid-template-columns: minmax(118px, .68fr) minmax(0, 1fr); align-items: center; }
   .team-photo { width: min(100px, calc(100% - 14px)); height: auto; min-height: 0; aspect-ratio: 1 / 1; margin: 16px auto; border-width: 4px; }
   .team-card-copy { align-self: center; padding: 18px; }
+  #branchMap { height: 280px; }
+  .store-map-caption { align-items: flex-start; flex-direction: column; gap: 3px; }
+  .store-benefits { grid-template-columns: 1fr; }
+  .store-benefit, .store-benefit:nth-child(2) { border-right: 0; border-bottom: 1px solid var(--line); }
+  .store-benefit:last-child { border-bottom: 0; }
   .store-grid { grid-template-columns: 1fr; }
   .client-logo-stage { padding: 17px 13px; }
   .client-logo-track { grid-template-columns: repeat(2, minmax(0,1fr)); gap: 4px; }

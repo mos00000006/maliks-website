@@ -2,4 +2,4 @@ MALIKS WEBSITE TEAM AND STORE LOCATOR PATCH
 
 Extract index.html, styles.css, and app.js into the root folder of the website repository and replace the existing files.
 
-The team section no longer has the “Here to help” callout. The Store Locator section includes 14 PowerBuild branches, a branch/town search, click-to-call numbers, and Google Maps directions links. Team portraits are embedded in index.html and remain circular, so no separate image folder is required.
+The patch removes the “Here to help” callout, keeps the four circular team portraits embedded in index.html, and adds a searchable locator for the 14 supplied PowerBuild branches. The locator includes opening hours, More information panels, clickable phone numbers, Google Maps directions, and an interactive map focused on the listed Gauteng branch areas. The map uses OpenStreetMap tiles; directions links open the full address supplied for each branch.
