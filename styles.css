@@ -68,6 +68,7 @@ img { max-width: 100%; display: block; }
 .brand-copy { display: grid; gap: 0; line-height: 1; }
 .brand-copy strong { color: var(--blue-950); font-size: 24px; letter-spacing: -.04em; }
 .brand-copy small { color: var(--blue-700); font-size: 11px; font-weight: 800; letter-spacing: .14em; margin-top: 7px; white-space: nowrap; }
+.brand-trading { display: block; margin-top: 4px; color: #748392; font-size: 9px; font-weight: 700; letter-spacing: .045em; line-height: 1.1; white-space: nowrap; }
 
 .global-search { height: 48px; display: flex; align-items: center; gap: 11px; padding: 0 10px 0 17px; border: 1px solid var(--line); border-radius: 14px; background: var(--soft); transition: border-color .2s ease, box-shadow .2s ease, background .2s ease; }
 .global-search:focus-within { background: var(--white); border-color: var(--blue-600); box-shadow: 0 0 0 4px rgba(10,111,201,.11); }
@@ -234,8 +235,8 @@ img { max-width: 100%; display: block; }
 .client-logo-stage::before { content: ""; position: absolute; inset: 0; opacity: .2; background-image: linear-gradient(135deg, rgba(255,255,255,.17) 1px, transparent 1px), linear-gradient(45deg, rgba(255,255,255,.12) 1px, transparent 1px); background-size: 42px 42px; }
 .client-logo-track { position: relative; z-index: 1; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); align-items: center; gap: 10px; }
 .client-logo { position: relative; min-width: 0; min-height: 92px; display: grid; place-items: center; padding: 12px 8px; }
-.client-logo > span { color: rgba(255,255,255,.84); font-size: clamp(12px, 1.2vw, 17px); font-weight: 900; letter-spacing: -.03em; text-align: center; opacity: 0; }
-.client-logo.image-missing > span { opacity: 1; }
+.client-logo > span { color: rgba(255,255,255,.84); font-size: clamp(12px, 1.2vw, 17px); font-weight: 900; letter-spacing: -.03em; text-align: center; opacity: 1; }
+.client-logo.image-ready > span { opacity: 0; }
 .client-logo img { position: absolute; inset: 12px 8px; width: calc(100% - 16px); height: calc(100% - 24px); object-fit: contain; filter: grayscale(1) brightness(0) invert(1); opacity: .9; transition: opacity .2s ease, transform .2s ease; }
 .client-logo:hover img { opacity: 1; transform: scale(1.05); }
 
@@ -483,6 +484,7 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .brand img { width: 44px; height: 44px; }
   .brand-copy strong { font-size: 20px; }
   .brand-copy small { font-size: 9px; margin-top: 5px; }
+  .brand-trading { margin-top: 3px; font-size: 7px; letter-spacing: .035em; }
   .global-search { grid-area: search; height: 44px; }
   .header-actions { grid-area: action; }
   .header-action-label { display: none; }

@@ -361,8 +361,12 @@ function attachImageFallbacks() {
   for (const image of $all("img")) {
     if (image.dataset.fallbackBound) continue;
     image.dataset.fallbackBound = "1";
+    const logo = image.closest(".client-logo");
+    if (logo) {
+      image.addEventListener("load", () => logo.classList.add("image-ready"), { once: true });
+      if (image.complete && image.naturalWidth > 0) logo.classList.add("image-ready");
+    }
     image.addEventListener("error", () => {
-      const logo = image.closest(".client-logo");
       if (logo) logo.classList.add("image-missing");
       image.remove();
     });
