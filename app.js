@@ -45,6 +45,9 @@ const ICON_PATHS = {
   sparkle: '<path d="m12 3 1.2 5.8L19 10l-5.8 1.2L12 17l-1.2-5.8L5 10l5.8-1.2L12 3Z"></path><path d="m19 16 .5 2.5L22 19l-2.5.5L19 22l-.5-2.5L16 19l2.5-.5L19 16Z"></path>',
   tag: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12l8 8-8 8H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><circle cx="8" cy="8" r="1"></circle>',
   truck: '<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle>',
+  people: '<circle cx="9" cy="8" r="3"></circle><path d="M3 19a6 6 0 0 1 12 0M17 11a2.5 2.5 0 1 0 0-5M17 14a4.5 4.5 0 0 1 4 4.5"></path>',
+  project: '<path d="M3 20h18M5 17V9h14v8M8 9V5h8v4M10 13h4M10 16h4"></path>',
+  worker: '<circle cx="9" cy="8" r="3"></circle><path d="M3 19a6 6 0 0 1 12 0M16 6h4M18 4v4"></path>',
   filter: '<path d="M4 6h16M7 12h10M10 18h4"></path>',
   info: '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>',
   store: '<path d="M4 10h16v10H4z"></path><path d="M3 10 5 4h14l2 6M8 10v10M16 10v10"></path>',
@@ -95,6 +98,9 @@ function hydrateStaticIcons() {
     "tag-icon": "tag",
     "truck-icon": "truck",
     "home-icon": "home",
+    "people-icon": "people",
+    "project-icon": "project",
+    "worker-icon": "worker",
     "filter-icon": "filter",
     "info-icon": "info",
     "store-icon": "store",
@@ -355,7 +361,11 @@ function attachImageFallbacks() {
   for (const image of $all("img")) {
     if (image.dataset.fallbackBound) continue;
     image.dataset.fallbackBound = "1";
-    image.addEventListener("error", () => image.remove());
+    image.addEventListener("error", () => {
+      const logo = image.closest(".client-logo");
+      if (logo) logo.classList.add("image-missing");
+      image.remove();
+    });
   }
 }
 

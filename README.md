@@ -1,6 +1,6 @@
 # Maliks Paint and Hardware — Catalogue Storefront
 
-This is a buildless, GitHub Pages-ready storefront generated from the active Maliks catalogue. It combines the catalogue shopping experience with the public Maliks Paint and Hardware content: the complete-building-solutions hero, six service promises, range highlights, testimonials, community message and contact details. It is intentionally separate from the Maliks Group Hub operational application.
+This is a buildless, GitHub Pages-ready storefront generated from the active Maliks catalogue. It combines the catalogue shopping experience with the public Maliks Paint and Hardware content: the complete-building-solutions hero, About section, six service promises, range highlights, testimonials, client-brand row, achievement figures and contact details. It is intentionally separate from the Maliks Group Hub operational application.
 
 ## Local preview
 
