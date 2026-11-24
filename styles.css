@@ -864,3 +864,11 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
 .primary-nav::-webkit-scrollbar-track { background: transparent; }
 .primary-nav::-webkit-scrollbar-thumb { border-radius: 99px; background: rgba(255,255,255,.48); }
 .nav-cta { flex: 0 0 auto; margin-left: 0; white-space: nowrap; }
+
+/* Center the yellow brand label in the top utility bar. */
+.utility-inner { position: relative; justify-content: flex-end; }
+.utility-inner > span:first-child { position: absolute; left: 50%; transform: translateX(-50%); white-space: nowrap; }
+.utility-inner > .utility-links { margin-left: auto; }
+@media (max-width: 1080px) {
+  .utility-inner > .utility-links { display: none; }
+}

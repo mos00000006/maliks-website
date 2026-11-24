@@ -20,3 +20,4 @@ The map uses OpenStreetMap tiles; branch direction links open Google Maps using 
 - Adds category images for fasteners, ironmongery, and plumbing to the hero area.
 - Replaces the project-moving heading and paragraph with the supplied warehouse photo and keeps “Visit or call the team” above it; branch contact and quote details remain available.
 - Replaces the Careers “Grow with us” M badge with the supplied high-resolution PowerBuild logo.
+- Centers the yellow Maliks Paint and Hardware label in the top utility bar; right-side utility links hide on narrower screens to prevent overlap.
