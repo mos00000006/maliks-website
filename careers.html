@@ -1,0 +1,139 @@
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#075ca9" />
+    <meta name="description" content="Explore careers and current vacancies at Maliks Paint and Hardware." />
+    <title>Careers | Maliks Paint and Hardware</title>
+    <link rel="icon" type="image/png" href="powerbuild-logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="careers.js" defer></script>
+  </head>
+  <body class="careers-page">
+    <div class="utility-bar">
+      <div class="container utility-inner">
+        <span><strong>Maliks Paint and Hardware</strong> · Careers</span>
+        <span class="utility-links"><a href="index.html">Back to the main site</a></span>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="container careers-header-main">
+        <a class="brand" href="index.html" aria-label="Maliks Paint and Hardware home">
+          <img src="powerbuild-logo.png" alt="PowerBuild" />
+          <span class="brand-copy"><strong>Maliks</strong><small>PAINT &amp; HARDWARE</small><span class="brand-trading">Trading as Powerbuild</span></span>
+        </a>
+        <nav class="careers-nav" aria-label="Main navigation">
+          <a href="index.html">Home</a>
+          <a href="index.html#about">About Maliks</a>
+          <a href="index.html#store-locator">Store Locator</a>
+          <a href="careers.html" aria-current="page">Careers</a>
+          <a class="button button-primary" href="index.html#contact">Contact us</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="careers-hero" aria-labelledby="careersTitle">
+        <div class="container careers-hero-grid">
+          <div class="careers-hero-copy">
+            <p class="careers-breadcrumb"><a href="index.html">Home</a><span aria-hidden="true">/</span> Careers</p>
+            <p class="eyebrow">Careers at Maliks</p>
+            <h1 id="careersTitle">Build your career while helping others build.</h1>
+            <p class="careers-hero-lede">Join a team that helps builders, contractors and homeowners find the products and support they need to get the job done.</p>
+            <div class="careers-hero-actions">
+              <a class="button button-primary" href="#current-vacancies">View vacancies</a>
+              <a class="button button-ghost" href="#about-maliks">About Maliks</a>
+            </div>
+          </div>
+          <aside class="careers-hero-card" aria-label="Working at Maliks">
+            <span class="careers-hero-card-mark" aria-hidden="true">M</span>
+            <p class="eyebrow">Grow with us</p>
+            <h2>Good service starts with good people.</h2>
+            <p>Bring your knowledge, care and willingness to help. There may be a place for you on our team.</p>
+          </aside>
+        </div>
+      </section>
+
+      <section class="careers-about" id="about-maliks" aria-labelledby="aboutMaliksTitle">
+        <div class="container">
+          <div class="section-heading">
+            <p class="eyebrow eyebrow-blue">Who we are</p>
+            <h2 id="aboutMaliksTitle">About Maliks</h2>
+            <p class="section-lede">We bring practical building and home improvement solutions closer to the people who need them.</p>
+          </div>
+          <div class="careers-info-grid">
+            <article class="careers-info-card">
+              <span class="careers-info-number">01</span>
+              <h3>About us</h3>
+              <p>Maliks Paint and Hardware serves builders, tradespeople and homeowners with paint, hardware and building supplies. Our branch teams help customers choose dependable products and find practical solutions for projects of every size.</p>
+            </article>
+            <article class="careers-info-card careers-mission-card" id="our-mission">
+              <span class="careers-info-number">02</span>
+              <h3>Our mission</h3>
+              <p>Our mission is to make building and home improvement easier through reliable products, helpful service and honest value, while giving our people the opportunity to learn, contribute and grow.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="vacancies-section" id="current-vacancies" aria-labelledby="vacanciesTitle">
+        <div class="container">
+          <div class="vacancies-heading">
+            <div class="section-heading">
+              <p class="eyebrow eyebrow-blue">Join our team</p>
+              <h2 id="vacanciesTitle">Current Vacancies</h2>
+              <p class="section-lede">Search open roles by job title, branch or location.</p>
+            </div>
+            <span class="vacancy-count-badge">1 open role</span>
+          </div>
+          <div class="vacancy-search-box">
+            <label for="vacancySearch">Search vacancies</label>
+            <div class="vacancy-search-control">
+              <span class="search-icon" aria-hidden="true"></span>
+              <input id="vacancySearch" type="search" autocomplete="off" placeholder="Try salesperson, Randfontein, Gauteng or Sungate" />
+            </div>
+            <p id="vacancyResults" class="vacancy-results" role="status" aria-live="polite">1 current vacancy</p>
+          </div>
+          <div class="vacancy-list" id="vacancyList">
+            <article class="vacancy-card" data-vacancy-search="salesperson sales retail randfontein gauteng sungate">
+              <div class="vacancy-card-main">
+                <div>
+                  <p class="eyebrow eyebrow-blue">Sales and retail</p>
+                  <h3>Salesperson</h3>
+                  <p class="vacancy-location"><span class="store-icon" aria-hidden="true"></span> Sungate · Randfontein, Gauteng</p>
+                </div>
+                <span class="vacancy-status">Open</span>
+              </div>
+              <dl class="vacancy-meta">
+                <div><dt>Branch</dt><dd>Sungate</dd></div>
+                <div><dt>Published</dt><dd>10 October 2026</dd></div>
+                <div><dt>Closing date</dt><dd>08 January 2027</dd></div>
+              </dl>
+              <div class="vacancy-card-footer">
+                <p>Based at the Sungate branch in Randfontein.</p>
+                <a class="button button-secondary" href="index.html#contact">Enquire about this vacancy</a>
+              </div>
+            </article>
+            <div class="vacancy-empty" id="vacancyEmpty" hidden>
+              <h3>No vacancies found</h3>
+              <p>Try another job title, branch or location.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-top">
+        <div class="footer-brand"><img src="powerbuild-logo.png" alt="PowerBuild" /><h2>Maliks Paint and Hardware</h2><p>Practical building and home improvement solutions, supported by local teams.</p></div>
+        <div class="footer-links">
+          <div><h3>Explore</h3><a href="index.html">Home</a><a href="index.html#about">About Maliks</a><a href="careers.html">Careers</a><a href="#current-vacancies">Current Vacancies</a><a href="index.html#store-locator">Store Locator</a></div>
+          <div><h3>Visit Maliks</h3><p>26 Jacobs Road, Chamdor, Krugersdorp</p><a href="tel:+27117628051">011 762 8051</a><a href="index.html#contact">Contact Maliks</a></div>
+        </div>
+      </div>
+      <div class="container footer-bottom"><span>© 2026 Maliks Paint and Hardware</span><span>Powered by PowerBuild</span><a href="#top">Back to top <span class="chevron-up-icon" aria-hidden="true"></span></a></div>
+    </footer>
+  </body>
+</html>

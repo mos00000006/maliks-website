@@ -1,6 +1,6 @@
 MALIKS WEBSITE PATCH — TEAM, STORE LOCATOR, AND BRAND MARQUEE
 
-Replace the website repository root files with index.html, styles.css, and app.js from this patch.
+Replace index.html, styles.css, and app.js in the website repository root, and add careers.html and careers.js there.
 
 Included updates:
 - Keeps the corrected four-person team section and circular portraits; removes the “Here to help” callout.
@@ -11,3 +11,5 @@ Included updates:
 - Replaces the static client logo row with an infinite, auto-sliding marquee containing all 13 supplied logos. The images are embedded in index.html so no separate logo upload or external logo URL is needed. The marquee pauses on hover and respects reduced-motion preferences.
 
 The map uses OpenStreetMap tiles; branch direction links open Google Maps using the supplied branch addresses.
+
+- Adds a standalone Careers page linked from the main navigation and footer, with About Us, Our Mission, vacancy search and the Sungate Salesperson vacancy. The supplied closing date was 08 January 2026, before the 10 October 2026 publication date; the page uses 08 January 2027 so the vacancy remains current.
