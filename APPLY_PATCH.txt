@@ -13,3 +13,5 @@ Included updates:
 The map uses OpenStreetMap tiles; branch direction links open Google Maps using the supplied branch addresses.
 
 - Adds a standalone Careers page linked from the main navigation and footer, with About Us, Our Mission, vacancy search and the Sungate Salesperson vacancy. The supplied closing date was 08 January 2026, before the 10 October 2026 publication date; the page uses 08 January 2027 so the vacancy remains current.
+- Adds the Submit CV application dialog with personal details, CV upload, optional applicant information, terms acceptance and form validation. No personal data is transmitted or stored until a secure submission service is configured.
+- Keeps the main navigation swipeable at narrower widths so links such as Careers remain reachable without squeezing or wrapping the labels.

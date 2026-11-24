@@ -547,7 +547,14 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
 
 @media (max-width: 1080px) {
   .header-main { grid-template-columns: 220px minmax(220px,1fr) 108px; gap: 18px; }
-  .primary-nav { gap: 16px; }
+  .nav-row { gap: 12px; }
+  .department-toggle { flex: 0 0 auto; white-space: nowrap; }
+  .primary-nav { flex: 1 1 0; min-width: 0; gap: 16px; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; white-space: nowrap; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.48) transparent; -webkit-overflow-scrolling: touch; }
+  .primary-nav a { flex: 0 0 auto; white-space: nowrap; }
+  .primary-nav::-webkit-scrollbar { height: 3px; }
+  .primary-nav::-webkit-scrollbar-track { background: transparent; }
+  .primary-nav::-webkit-scrollbar-thumb { border-radius: 99px; background: rgba(255,255,255,.48); }
+  .nav-cta { flex: 0 0 auto; white-space: nowrap; margin-left: 0; }
   .hero-grid { grid-template-columns: minmax(0, .9fr) minmax(380px, 1.1fr); gap: 18px; }
   .product-one { left: 40px; }
   .product-three { left: 136px; }
@@ -785,4 +792,46 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .vacancy-meta { grid-template-columns: 1fr; gap: 13px; }
   .vacancy-card-footer { align-items: stretch; flex-direction: column; }
   .vacancy-card-footer .button { width: 100%; }
+}
+
+
+/* CV application dialog */
+.cv-dialog { width: min(960px, calc(100% - 28px)); max-width: 960px; max-height: min(92vh, 900px); margin: auto; padding: 0; overflow: hidden; border: 0; border-radius: 22px; background: var(--white); color: var(--ink); box-shadow: 0 25px 80px rgba(4,28,53,.34); }
+.cv-dialog::backdrop { background: rgba(4,28,53,.72); backdrop-filter: blur(4px); }
+.cv-dialog-layout { display: flex; max-height: min(92vh, 900px); flex-direction: column; }
+.cv-dialog-header { position: relative; display: flex; flex: 0 0 auto; align-items: flex-start; justify-content: space-between; gap: 22px; padding: 26px 32px 22px; border-bottom: 1px solid var(--line); background: var(--white); }
+.cv-dialog-header .eyebrow { margin-bottom: 8px; }
+.cv-dialog-header h2 { margin: 0; color: var(--blue-950); font-size: 30px; letter-spacing: -.045em; }
+.cv-dialog-header > div > p:last-child { max-width: 710px; margin: 7px 0 0; color: var(--muted); font-size: 13px; line-height: 1.55; }
+.cv-dialog-close { flex: 0 0 auto; width: 38px; height: 38px; display: grid; place-items: center; border: 1px solid var(--line); border-radius: 50%; background: var(--soft); color: var(--blue-950); font-size: 25px; line-height: 1; cursor: pointer; }
+.cv-dialog-close:hover { background: var(--blue-100); }
+.cv-dialog-body { overflow-y: auto; padding: 24px 32px 30px; overscroll-behavior: contain; }
+.cv-submission-notice { margin-bottom: 24px; padding: 13px 15px; border: 1px solid rgba(7,92,169,.18); border-radius: 11px; background: var(--blue-100); color: var(--blue-950); font-size: 13px; line-height: 1.5; }
+.cv-form-section { min-width: 0; margin: 0 0 27px; padding: 0; border: 0; }
+.cv-form-section legend { width: 100%; margin-bottom: 17px; padding: 0 0 9px; border-bottom: 1px solid var(--line); color: var(--blue-950); font-size: 19px; font-weight: 850; letter-spacing: -.025em; }
+.cv-form-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 15px 18px; }
+.cv-field { min-width: 0; display: grid; align-content: start; gap: 7px; color: var(--blue-950); font-size: 12px; font-weight: 800; }
+.cv-field b, .cv-terms b { color: #b13c2e; }
+.cv-field input:not([type="file"]), .cv-field select { width: 100%; min-height: 44px; padding: 0 12px; border: 1px solid #cbd7e1; border-radius: 9px; outline: 0; background: var(--white); color: var(--ink); font: inherit; font-size: 13px; font-weight: 500; }
+.cv-field input:focus, .cv-field select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,201,.11); }
+.cv-field input[readonly] { background: var(--soft); color: var(--muted); }
+.cv-field-full { grid-column: 1 / -1; }
+.cv-field input[type="file"] { width: 100%; min-height: 48px; padding: 10px; border: 1px dashed #9fb2c3; border-radius: 9px; background: var(--soft); color: var(--muted); font-size: 12px; }
+.cv-field small { color: var(--muted); font-size: 11px; font-weight: 500; }
+.cv-terms { padding-top: 2px; }
+.cv-terms label { display: flex; align-items: flex-start; gap: 9px; color: var(--blue-950); font-size: 13px; font-weight: 800; }
+.cv-terms input { flex: 0 0 auto; width: 17px; height: 17px; margin: 0; accent-color: var(--blue-700); }
+.cv-terms p { margin: 7px 0 0 26px; color: var(--muted); font-size: 12px; line-height: 1.5; }
+.cv-submit-row { display: grid; justify-items: start; gap: 10px; margin-top: 21px; padding-top: 20px; border-top: 1px solid var(--line); }
+.cv-submit-row .button { min-width: 210px; }
+.cv-submit-row p { min-height: 18px; margin: 0; color: var(--blue-700); font-size: 12px; font-weight: 750; line-height: 1.5; }
+@media (max-width: 620px) {
+  .cv-dialog { width: calc(100% - 16px); max-height: 96vh; border-radius: 16px; }
+  .cv-dialog-layout { max-height: 96vh; }
+  .cv-dialog-header { padding: 20px 18px 17px; gap: 12px; }
+  .cv-dialog-header h2 { font-size: 25px; }
+  .cv-dialog-body { padding: 18px 18px 23px; }
+  .cv-form-grid { grid-template-columns: 1fr; gap: 13px; }
+  .cv-field-full { grid-column: auto; }
+  .cv-submit-row .button { width: 100%; }
 }

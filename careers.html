@@ -45,6 +45,7 @@
             <div class="careers-hero-actions">
               <a class="button button-primary" href="#current-vacancies">View vacancies</a>
               <a class="button button-ghost" href="#about-maliks">About Maliks</a>
+              <button class="button button-ghost" type="button" data-open-cv>Submit CV</button>
             </div>
           </div>
           <aside class="careers-hero-card" aria-label="Working at Maliks">
@@ -113,7 +114,7 @@
               </dl>
               <div class="vacancy-card-footer">
                 <p>Based at the Sungate branch in Randfontein.</p>
-                <a class="button button-secondary" href="index.html#contact">Enquire about this vacancy</a>
+                <button class="button button-primary" type="button" data-open-cv>Submit CV</button>
               </div>
             </article>
             <div class="vacancy-empty" id="vacancyEmpty" hidden>
@@ -123,6 +124,66 @@
           </div>
         </div>
       </section>
+
+      <dialog class="cv-dialog" id="cvUploadDialog" aria-labelledby="cvUploadTitle">
+        <div class="cv-dialog-layout">
+          <header class="cv-dialog-header">
+            <div>
+              <p class="eyebrow eyebrow-blue">Careers at Maliks</p>
+              <h2 id="cvUploadTitle">CV Upload</h2>
+              <p>Add your CV to our database. We will review it and when a suitable role arises we will consider you for the position.</p>
+            </div>
+            <button class="cv-dialog-close" type="button" data-close-cv aria-label="Close CV upload form">×</button>
+          </header>
+          <div class="cv-dialog-body">
+            <div class="cv-submission-notice" role="note">Online CV submission is not active yet. Your details will not be sent or saved from this page until a secure submission destination is connected.</div>
+            <form id="cvApplicationForm">
+              <fieldset class="cv-form-section">
+                <legend>Personal Details</legend>
+                <div class="cv-form-grid">
+                  <label class="cv-field"><span>First Name <b>*</b></span><input name="firstName" type="text" autocomplete="given-name" required /></label>
+                  <label class="cv-field"><span>Last Name <b>*</b></span><input name="lastName" type="text" autocomplete="family-name" required /></label>
+                  <label class="cv-field"><span>Email <b>*</b></span><input name="email" type="email" autocomplete="email" required /></label>
+                  <label class="cv-field"><span>Gender <b>*</b></span><select name="gender" required><option value="" selected disabled>Select your gender</option><option>Female</option><option>Male</option><option>Non-binary</option><option>Prefer not to say</option></select></label>
+                  <label class="cv-field"><span>Nationality <b>*</b></span><select name="nationality" required><option value="" selected disabled>Select your nationality</option><option>South African</option><option>Botswanan</option><option>Eswatini</option><option>Lesotho</option><option>Malawian</option><option>Mozambican</option><option>Namibian</option><option>Nigerian</option><option>Zimbabwean</option><option>Other nationality</option></select></label>
+                  <label class="cv-field"><span>Work eligibility <b>*</b></span><select name="workEligibility" required><option value="" selected disabled>Select your work eligibility</option><option>South African citizen</option><option>Permanent resident</option><option>Valid work permit</option><option>Other</option></select></label>
+                  <label class="cv-field"><span>ID Number <b>*</b></span><input name="idNumber" type="text" inputmode="numeric" autocomplete="off" required /></label>
+                  <label class="cv-field"><span>Phone <b>*</b></span><input name="phone" type="tel" autocomplete="tel" required /></label>
+                  <label class="cv-field"><span>Country</span><input name="country" type="text" value="South Africa" readonly /></label>
+                  <label class="cv-field"><span>Province/State <b>*</b></span><select name="province" autocomplete="address-level1" required><option value="" selected disabled>Select your province</option><option>Eastern Cape</option><option>Free State</option><option>Gauteng</option><option>KwaZulu-Natal</option><option>Limpopo</option><option>Mpumalanga</option><option>North West</option><option>Northern Cape</option><option>Western Cape</option></select></label>
+                  <label class="cv-field"><span>City Name <b>*</b></span><input name="city" type="text" autocomplete="address-level2" required /></label>
+                  <label class="cv-field"><span>Post Code <b>*</b></span><input name="postCode" type="text" inputmode="numeric" autocomplete="postal-code" required /></label>
+                  <label class="cv-field"><span>Ethnicity <b>*</b></span><select name="ethnicity" required><option value="" selected disabled>Select your ethnicity</option><option>Black African</option><option>Coloured</option><option>Indian/Asian</option><option>White</option><option>Other</option><option>Prefer not to say</option></select></label>
+                  <label class="cv-field cv-field-full"><span>CV Upload <b>*</b></span><input id="cvFile" name="cv" type="file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" required /><small id="cvFileName">PDF, DOC or DOCX</small></label>
+                </div>
+              </fieldset>
+
+              <fieldset class="cv-form-section">
+                <legend>More Details</legend>
+                <div class="cv-form-grid">
+                  <label class="cv-field"><span>Age</span><select name="age"><option value="" selected>Select age range</option><option>18 - 20</option><option>21 - 24</option><option>25 - 30</option><option>31 - 35</option><option>36 - 40</option><option>41 - 46</option><option>47 - 50</option><option>Above 51</option></select></label>
+                  <label class="cv-field"><span>Salary expectations?</span><select name="salary"><option value="" selected>Select salary expectation</option><option>R4 500 to R5 199</option><option>R5 200 to R5 999</option><option>R6 000 to R6 999</option><option>R7 000 to R7 999</option><option>R8 000 to R8 999</option><option>R10 000 to R11 999</option><option>R12 000 to R14 999</option><option>R15 000 to R17 999</option><option>R18 000 to R22 000</option><option>R22 001 to R25 000</option><option>R25 001 to R28 000</option><option>More than R28 000</option></select></label>
+                  <label class="cv-field"><span>Do you have a driver's licence?</span><select name="driversLicence"><option value="" selected>Select an answer</option><option>Yes</option><option>No</option></select></label>
+                  <label class="cv-field"><span>Do you own a vehicle?</span><select name="vehicle"><option value="" selected>Select an answer</option><option>Yes</option><option>No</option></select></label>
+                  <label class="cv-field"><span>Marital status</span><select name="maritalStatus"><option value="" selected>Select marital status</option><option>Single</option><option>Engaged</option><option>Married</option><option>Divorced</option></select></label>
+                  <label class="cv-field"><span>Education Level</span><select name="education"><option value="" selected>Select education level</option><option>No Matric</option><option>Matric/ Gr 12/ N3</option><option>Degree/ Diploma/ N5</option><option>Post Grad/ Masters</option></select></label>
+                  <label class="cv-field"><span>How Did You Hear About the Position?</span><select id="cvSource" name="source"><option value="" selected>Select a source</option><option>Pnet</option><option>CareerJunction</option><option>Careers24</option><option>Newspaper</option><option>LinkedIn</option><option>Facebook</option><option>Adendorff website</option><option>In-store posters</option><option>Word of mouth</option><option>Indeed</option><option>Other</option></select></label>
+                  <label class="cv-field cv-field-full" id="cvOtherSourceField" hidden><span>If you selected “Other”, please state the source</span><input id="cvOtherSource" name="otherSource" type="text" /></label>
+                </div>
+              </fieldset>
+
+              <div class="cv-terms">
+                <label><input name="terms" type="checkbox" required /><span>I Accept Terms &amp; Conditions <b>*</b></span></label>
+                <p>By submitting your application, you're accepting our terms and conditions.</p>
+              </div>
+              <div class="cv-submit-row">
+                <button class="button button-primary" type="submit">Submit Application</button>
+                <p id="cvFormStatus" role="status" aria-live="polite"></p>
+              </div>
+            </form>
+          </div>
+        </div>
+      </dialog>
     </main>
 
     <footer class="site-footer">
