@@ -316,7 +316,10 @@ img { max-width: 100%; display: block; }
 .client-logo:hover { transform: translateY(-3px); box-shadow: 0 9px 20px rgba(0,0,0,.23); }
 .client-logo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 64px; object-fit: contain; }
 .client-logo--mono img { filter: brightness(0) saturate(100%) invert(11%) sepia(54%) saturate(1264%) hue-rotate(172deg) brightness(92%) contrast(98%); }
-.client-logo-stage:hover .client-logo-track, .client-logo-stage:focus-within .client-logo-track { animation-play-state: paused; }
+.client-logo-stage:focus-within .client-logo-track { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .client-logo-stage:hover .client-logo-track { animation-play-state: paused; }
+}
 @keyframes client-logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) {
   .client-logo-track { animation: none; transform: none; }
@@ -678,6 +681,17 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .testimonial-card { padding: 25px 22px; }
   .client-chips { justify-content: start; }
   .client-chips span { min-height: 52px; padding: 0 16px; }
+
+/* Keep the logo marquee moving on touch screens and size its cards for phones. */
+.client-logo-track { flex-flow: row nowrap; min-width: max-content; }
+.client-logo-set { flex: 0 0 auto; }
+@media (max-width: 640px) {
+  .client-logo-stage { overflow: hidden; padding: 12px 0; touch-action: pan-y; }
+  .client-logo-track { animation-duration: 46s; }
+  .client-logo-set { gap: 10px; }
+  .client-logo { flex: 0 0 clamp(132px, 42vw, 148px); width: clamp(132px, 42vw, 148px); height: 84px; padding: 12px; }
+  .client-logo img { max-width: 100%; max-height: 54px; object-fit: contain; }
+}
   .commitment-card, .contact-card { padding: 31px 24px; }
   .department-cards { gap: 10px; }
   .department-card { min-height: 156px; padding: 15px; }
