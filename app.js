@@ -1,38 +1,572 @@
-'use strict';
-const products = window.MALIKS_PRODUCTS || [], config = window.MALIKS_CONFIG || {}, byId = new Map(products.map(p=>[p.id,p]));
-const $ = id=>document.getElementById(id), number=n=>n.toLocaleString('en-ZA'), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const counts = new Map(); products.forEach(p=>{counts.set(p.category,(counts.get(p.category)||0)+1);p.searchText=[p.name,p.code,p.category,p.description].join(' ').toLowerCase()});
-const categories=[...counts.keys()].sort((a,b)=>a.localeCompare(b));
-const grouped=[['Tools & accessories',['Tools','Tork Craft']],['Paint & accessories',['Paints & Allied','Hamiltons']],['Plumbing & underground',['Plumbing','Underground (UG)']],['Fasteners',['Fasteners']],['Locks & locksets',['Locks','Locksets']],['Doors & windows',['Doors & Frames','Windows']],['Tiles & flooring',['Tiles & Flooring']],['Bathroom & sanware',categories.filter(c=>c.startsWith('Bathroom'))],['Kitchens',['Kitchens']],['Home & décor',['Homeware','Window Blinds & Treatments']],['Roofing & building',['Roofing & Gutters','Boards & Ceilings','Timber','Fencing','Waterproofing']],['Adhesives & chemicals',['Adhesives & Chemicals']]];
-const groups=new Map(grouped.map(([n,c])=>[n,c]));
-const chosenCodes=['COH0816A','WHPDF-CARD-P11-02','E008','TF-NA6060-100','T023','PT1212','WHPDF-CARD-P05-10','COP28160','WHPDF-CARD-P11-03','T024','E080','WHPDF-CARD-P07-07'];
-const byCode=new Map(products.map(p=>[p.code,p]));
-const preferred=chosenCodes.map(c=>byCode.get(c)).filter(Boolean); const priority=new Map(preferred.map((p,i)=>[p.id,i]));
-let state={category:'',query:'',sort:'featured',page:1}; const perPage=24; let cart={};
-try{const saved=JSON.parse(localStorage.getItem('maliks-quote-v1')||'{}'); if(saved&&typeof saved==='object')for(const [id,q] of Object.entries(saved))if(byId.has(id)&&Number.isInteger(q)&&q>0)cart[id]=Math.min(q,99999)}catch{}
-const image=(p,cls='',lazy=true)=>`<img class="${cls}" src="${esc(p.image)}" alt="${esc(p.name)}" ${lazy?'loading="lazy"':''} decoding="async" referrerpolicy="no-referrer">`;
-function handleImages(root){root.querySelectorAll('img').forEach(im=>{const fail=()=>{if(!im.isConnected)return;const fallback=document.createElement('span');fallback.className='image-fallback';fallback.textContent='Image unavailable';im.replaceWith(fallback)};im.addEventListener('error',fail,{once:true});if(im.complete&&im.naturalWidth===0)fail()})}
-const deptButton=(c,count,selected=false)=>`<button type="button" data-dept="${esc(c)}" class="${selected?'selected':''}"><span>${esc(c||'All products')}</span><span>${number(count)}</span></button>`;
-function filterUI(){ $('filters').innerHTML=deptButton('',products.length,!state.category)+categories.map(c=>deptButton(c,counts.get(c),state.category===c)).join('');$('mobileDept').innerHTML=`<option value="">All departments</option>${categories.map(c=>`<option value="${esc(c)}">${esc(c)}</option>`).join('')}${grouped.map(([n])=>`<option value="${esc(n)}">${esc(n)}</option>`).join('')}`;$('mobileDept').value=state.category; $('departmentMenu').innerHTML=deptButton('',products.length)+categories.map(c=>deptButton(c,counts.get(c))).join('');}
-function scrollProducts(){$('products').scrollIntoView({behavior:'smooth',block:'start'})}
-function setDepartment(c){clearTimeout(searchTimer);state.category=c;state.query='';state.page=1;$('search').value='';render();closeMenu();scrollProducts()}
-function matches(p){return (!state.category||(groups.has(state.category)?groups.get(state.category).includes(p.category):p.category===state.category))&&state.query.toLowerCase().split(/\s+/).filter(Boolean).every(w=>p.searchText.includes(w))}
-function card(p){return `<article class="product-card"><button class="product-photo" data-detail="${p.id}" aria-label="View ${esc(p.name)}">${image(p)}</button><div class="card-body"><span class="card-cat">${esc(p.category)}</span><button class="card-name" data-detail="${p.id}">${esc(p.name)}</button><div class="card-code">SKU: ${esc(p.code)}</div><div class="card-price">Price on request</div><button class="add" data-add="${p.id}">＋ Add to quote</button></div></article>`}
-function render(){let results=products.filter(matches);if(state.sort==='name')results.sort((a,b)=>a.name.localeCompare(b.name));else if(state.sort==='name-desc')results.sort((a,b)=>b.name.localeCompare(a.name));else if(state.sort==='code')results.sort((a,b)=>a.code.localeCompare(b.code,undefined,{numeric:true}));else results.sort((a,b)=>(priority.get(a.id)??99999)-(priority.get(b.id)??99999)||Number(b.id)-Number(a.id));let pages=Math.max(1,Math.ceil(results.length/perPage));state.page=Math.min(pages,Math.max(1,state.page));const start=(state.page-1)*perPage;$('listingTitle').textContent=state.query?`Results for “${state.query}”`:state.category||'Explore our products';$('activeFilter').textContent=state.category||'All products';$('resultCount').textContent=results.length?`${number(start+1)}–${number(Math.min(start+perPage,results.length))} of ${number(results.length)} products`:'0 products';$('grid').innerHTML=results.length?results.slice(start,start+perPage).map(card).join(''):'<div class="empty"><h3>No matching products</h3><p>Try a different name, stock code or department.</p><button class="button primary" data-dept="">Clear filters</button></div>';handleImages($('grid'));let pgs=[...new Set([1,state.page-1,state.page,state.page+1,pages])].filter(p=>p>0&&p<=pages).sort((a,b)=>a-b);let pagination=`<button data-page="${state.page-1}" ${state.page===1?'disabled':''} aria-label="Previous page">‹</button>`;pgs.forEach((p,i)=>{if(i&&p>pgs[i-1]+1)pagination+='<span>…</span>';pagination+=`<button data-page="${p}" class="${p===state.page?'current':''}" ${p===state.page?'aria-current="page"':''}>${p}</button>`});pagination+=`<button data-page="${state.page+1}" ${state.page===pages?'disabled':''} aria-label="Next page">›</button>`;$('pagination').innerHTML=pages>1?pagination:'';filterUI()}
-function closeMenu(){$('departmentMenu').hidden=true;$('departmentToggle').setAttribute('aria-expanded','false')}
-$('departmentToggle').addEventListener('click',()=>{const visible=$('departmentMenu').hidden;$('departmentMenu').hidden=!visible;$('departmentToggle').setAttribute('aria-expanded',String(visible))});
-$('searchForm').addEventListener('submit',e=>{e.preventDefault();clearTimeout(searchTimer);state.query=$('search').value.trim();state.category='';state.page=1;render();scrollProducts()});let searchTimer;$('search').addEventListener('input',()=>{clearTimeout(searchTimer);searchTimer=setTimeout(()=>{state.query=$('search').value.trim();state.category='';state.page=1;render()},200)});$('sort').addEventListener('change',e=>{state.sort=e.target.value;state.page=1;render()});$('mobileDept').addEventListener('change',e=>setDepartment(e.target.value));$('clearFilters').addEventListener('click',()=>setDepartment(''));$('allCategories').addEventListener('click',()=>setDepartment(''));
-let timer;function toast(t){$('toast').textContent=t;$('toast').hidden=false;clearTimeout(timer);timer=setTimeout(()=>$('toast').hidden=true,2600)}
-function persist(){try{localStorage.setItem('maliks-quote-v1',JSON.stringify(cart))}catch{}$('quoteCount').textContent=number(Object.values(cart).reduce((a,b)=>a+b,0))}
-function add(id,q=1){if(!byId.has(id))return;cart[id]=Math.min(99999,(cart[id]||0)+Math.max(1,Math.floor(Number(q)||1)));persist();toast('Added to your quotation');if($('quoteDialog').open)renderQuote()}
-function openDetail(id){const p=byId.get(id);if(!p)return;$('productDetail').innerHTML=`<div class="detail"><div>${image(p,'detail-image',false)}</div><div><span class="kicker">${esc(p.category)}</span><h2>${esc(p.name)}</h2><p class="muted">Stock code: ${esc(p.code)}</p>${p.description&&p.description!==p.name?`<p>${esc(p.description)}</p>`:''}<h3>Price on request</h3><p class="muted">Contact your store to confirm current pricing and availability.</p><label>Quantity <input id="detailQty" type="number" min="1" max="99999" value="1"></label><p><button class="button yellow" id="detailAdd">＋ Add to quotation</button></p></div></div>`;handleImages($('productDetail'));$('detailAdd').addEventListener('click',()=>{add(id,$('detailQty').value);$('productDialog').close()});$('productDialog').showModal()}
-function renderQuote(){const list=Object.entries(cart);$('quoteItems').innerHTML=list.length?list.map(([id,q])=>{const p=byId.get(id);return `<div class="quote-line">${image(p)}<div><b>${esc(p.name)}</b><small>${esc(p.code)}</small><br><button data-remove="${id}">Remove</button></div><input type="number" min="1" max="99999" value="${q}" data-qty="${id}" aria-label="Quantity for ${esc(p.name)}"></div>`}).join(''):'<p class="muted">Your quotation is empty. Browse the catalogue and add products to get started.</p>';handleImages($('quoteItems'));['whatsapp','downloadQuote','copyQuote'].forEach(id=>$(id).disabled=!list.length);$('quoteNotice').textContent=config.whatsappNumber?'This is a quotation request, not a paid order. Prices and stock will be confirmed by your store.':'This is a quotation request, not a paid order. Choose your Maliks sales representative when sharing via WhatsApp.'}
-function openQuote(){renderQuote();$('quoteDialog').showModal()}
-$('quoteOpen').addEventListener('click',openQuote);$('helpQuote').addEventListener('click',openQuote);$('fulfilment').addEventListener('change',()=>{$('addressLabel').hidden=$('fulfilment').value!=='Delivery'});$('quoteForm').addEventListener('submit',e=>e.preventDefault());$('quoteItems').addEventListener('change',e=>{if(e.target.matches('[data-qty]')){cart[e.target.dataset.qty]=Math.min(99999,Math.max(1,Math.floor(Number(e.target.value)||1)));e.target.value=cart[e.target.dataset.qty];persist()}});
-function quoteText(){const lines=['MALIKS PAINT & HARDWARE | POWERBUILD','QUOTATION REQUEST',''];if($('customerName').value.trim())lines.push('Name: '+$('customerName').value.trim());if($('customerPhone').value.trim())lines.push('Phone: '+$('customerPhone').value.trim());lines.push('Fulfilment: '+$('fulfilment').value);if($('fulfilment').value==='Delivery'&&$('address').value.trim())lines.push('Delivery address: '+$('address').value.trim());lines.push('','Products:');Object.entries(cart).forEach(([id,q],i)=>{const p=byId.get(id);lines.push(`${i+1}. ${p.name} [${p.code}] × ${q}`)});if($('notes').value.trim())lines.push('','Notes: '+$('notes').value.trim());lines.push('','Please confirm pricing and availability. Thank you.');return lines.join('\n')}
-$('whatsapp').addEventListener('click',()=>{const phone=String(config.whatsappNumber||'').replace(/\D/g,'');const text=quoteText();window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`,'_blank','noopener,noreferrer')});$('downloadQuote').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([quoteText()],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='maliks-quotation.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)});$('copyQuote').addEventListener('click',async()=>{try{await navigator.clipboard.writeText(quoteText());toast('Quotation copied')}catch{const t=document.createElement('textarea');t.value=quoteText();$('quoteDialog').append(t);t.select();try{if(document.execCommand('copy'))toast('Quotation copied');else toast('Use Download list instead')}catch{toast('Use Download list instead')}t.remove()}});
-document.addEventListener('click',e=>{const b=e.target.closest('button');if(b){if(b.hasAttribute('data-dept'))setDepartment(b.dataset.dept);if(b.dataset.detail)openDetail(b.dataset.detail);if(b.dataset.add)add(b.dataset.add);if(b.dataset.page&&!b.disabled){state.page=Number(b.dataset.page);render();scrollProducts()}if(b.dataset.close)$(b.dataset.close).close();if(b.dataset.remove){delete cart[b.dataset.remove];persist();renderQuote()}}if(!e.target.closest('#departmentMenu,#departmentToggle'))closeMenu()});document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu()});
-$('heroArt').innerHTML=preferred.slice(0,4).map(p=>`<div class="hero-product">${image(p,'',false)}</div>`).join('');handleImages($('heroArt'));
-const categorySymbols={'Tiles & flooring':'▦','Bathroom & sanware':'♧','Kitchens':'▣','Home & décor':'▤','Adhesives & chemicals':'◇'};
-$('categoryTiles').innerHTML=grouped.map(([name,cats])=>{const groupProducts=products.filter(p=>cats.includes(p.category));const p=preferred.find(p=>cats.includes(p.category))||groupProducts.find(p=>p.image.startsWith('assets/'))||groupProducts[0];return p?`<button class="category-tile" data-dept="${esc(name)}">${p.image.startsWith('assets/')||p.image.startsWith('data:')?image(p):`<span class="category-symbol" aria-hidden="true">${categorySymbols[name]||'▦'}</span>`}<b>${esc(name)}</b><small>${number(groupProducts.length)} products</small></button>`:''}).join('');handleImages($('categoryTiles'));
-$('heroTotal').textContent=number(products.length);$('year').textContent=new Date().getFullYear();$('contactText').textContent=[config.publicPhone,config.publicEmail].filter(Boolean).join(' · ');persist();render();
+const state = {
+  products: [],
+  loaded: false,
+  query: "",
+  department: "",
+  category: "",
+  sort: "featured",
+  page: 1,
+  pageSize: 24,
+  view: "grid",
+  quote: [],
+  modalProductId: null,
+};
+
+const DEPARTMENTS = [
+  { id: "tools", name: "Tools & equipment", shortName: "Tools", description: "Hand tools, power tools and accessories", icon: "wrench", match: (p) => /tools|tork craft|hamiltons/i.test(p.category) },
+  { id: "paint", name: "Paint & chemicals", shortName: "Paint & chemicals", description: "Paints, adhesives and treatment products", icon: "paint", match: (p) => /paints & allied|adhesives|waterproofing/i.test(p.category) },
+  { id: "plumbing", name: "Plumbing", shortName: "Plumbing", description: "Pipes, fittings, waste and water products", icon: "droplet", match: (p) => /plumbing|underground|pipes|fittings|waste|soil|copper|galvanised/i.test(p.category) },
+  { id: "bathroom", name: "Bathroom & tiles", shortName: "Bathroom & tiles", description: "Basins, taps, showers, baths and finishes", icon: "bath", match: (p) => /bathroom|tiles & flooring|kitchens/i.test(p.category) },
+  { id: "electrical", name: "Electrical & lighting", shortName: "Electrical", description: "Electrical accessories, lamps and lighting", icon: "bolt", match: (p) => /electrical & lighting/i.test(p.category) },
+  { id: "hardware", name: "Hardware & security", shortName: "Hardware & security", description: "Fasteners, ironmongery, locks and doors", icon: "lock", match: (p) => /fasteners|ironmongery|locks|locksets|doors|windows|blinds|general hardware/i.test(p.category) },
+  { id: "building", name: "Building essentials", shortName: "Building", description: "Roofing, boards, timber and materials", icon: "building", match: (p) => /roofing|bricks|boards|timber|insulation|steel|fencing/i.test(p.category) },
+  { id: "home", name: "Home & garden", shortName: "Home & garden", description: "Useful products for around the home", icon: "home", match: (p) => /homeware|garden/i.test(p.category) },
+];
+
+const ICON_PATHS = {
+  search: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>',
+  quote: '<path d="M6 3h12v18H6z"></path><path d="M9 7h6M9 11h6M9 15h3"></path><path d="M15 18h3"></path>',
+  menu: '<path d="M4 7h16M4 12h16M4 17h16"></path>',
+  chevron: '<path d="m6 9 6 6 6-6"></path>',
+  chevronUp: '<path d="m6 15 6-6 6 6"></path>',
+  plus: '<path d="M12 5v14M5 12h14"></path>',
+  minus: '<path d="M5 12h14"></path>',
+  grid: '<rect x="4" y="4" width="6" height="6" rx="1"></rect><rect x="14" y="4" width="6" height="6" rx="1"></rect><rect x="4" y="14" width="6" height="6" rx="1"></rect><rect x="14" y="14" width="6" height="6" rx="1"></rect>',
+  list: '<path d="M8 6h12M8 12h12M8 18h12"></path><path d="M4 6h.01M4 12h.01M4 18h.01"></path>',
+  check: '<path d="m5 12 4 4L19 6"></path>',
+  sparkle: '<path d="m12 3 1.2 5.8L19 10l-5.8 1.2L12 17l-1.2-5.8L5 10l5.8-1.2L12 3Z"></path><path d="m19 16 .5 2.5L22 19l-2.5.5L19 22l-.5-2.5L16 19l2.5-.5L19 16Z"></path>',
+  filter: '<path d="M4 6h16M7 12h10M10 18h4"></path>',
+  info: '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>',
+  store: '<path d="M4 10h16v10H4z"></path><path d="M3 10 5 4h14l2 6M8 10v10M16 10v10"></path>',
+  close: '<path d="m6 6 12 12M18 6 6 18"></path>',
+  copy: '<rect x="8" y="8" width="11" height="11" rx="2"></rect><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"></path>',
+  download: '<path d="M12 4v11M8 11l4 4 4-4M5 20h14"></path>',
+  print: '<path d="M6 9V4h12v5M6 17H4a1 1 0 0 1-1-1v-5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v5a1 1 0 0 1-1 1h-2"></path><path d="M6 14h12v6H6z"></path>',
+  eye: '<path d="M2.5 12s3.3-5 9.5-5 9.5 5 9.5 5-3.3 5-9.5 5-9.5-5-9.5-5Z"></path><circle cx="12" cy="12" r="2.5"></circle>',
+  wrench: '<path d="M14.7 6.3a4 4 0 0 0-5.4 5.4L4 17l3 3 5.3-5.3a4 4 0 0 0 5.4-5.4l-2.3 2.3-2.4-.6-.6-2.4 2.3-2.3Z"></path>',
+  paint: '<path d="M4 5h12v6H4zM16 8h2a2 2 0 0 1 2 2v1h-4M9 11v8a2 2 0 0 0 4 0v-3"></path>',
+  droplet: '<path d="M12 3s6 6.2 6 11a6 6 0 1 1-12 0c0-4.8 6-11 6-11Z"></path>',
+  bath: '<path d="M4 12h16v3a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4v-3ZM6 12V7a3 3 0 0 1 5.7-1.3L13 8"></path><path d="M7 19v2M17 19v2"></path>',
+  bolt: '<path d="m13 2-8 11h6l-1 9 8-11h-6l1-9Z"></path>',
+  lock: '<rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3M12 14v2"></path>',
+  building: '<path d="M4 20V5l8-2 8 2v15M4 20h16M8 8h2M14 8h2M8 12h2M14 12h2M10 20v-4h4v4"></path>',
+  home: '<path d="m3 11 9-8 9 8v9H3v-9Z"></path><path d="M9 20v-6h6v6"></path>',
+};
+
+function icon(name, extraClass = "") {
+  return `<svg class="icon icon-${name} ${extraClass}" aria-hidden="true" viewBox="0 0 24 24">${ICON_PATHS[name] || ICON_PATHS.grid}</svg>`;
+}
+
+function $(selector) { return document.querySelector(selector); }
+function $all(selector) { return Array.from(document.querySelectorAll(selector)); }
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function hydrateStaticIcons() {
+  const classMap = {
+    "search-icon": "search",
+    "quote-icon": "quote",
+    "menu-icon": "menu",
+    "chevron-icon": "chevron",
+    "chevron-up-icon": "chevronUp",
+    "plus-icon": "plus",
+    "grid-icon": "grid",
+    "list-icon": "list",
+    "check-icon": "check",
+    "sparkle-icon": "sparkle",
+    "filter-icon": "filter",
+    "info-icon": "info",
+    "store-icon": "store",
+    "close-icon": "close",
+    "copy-icon": "copy",
+    "download-icon": "download",
+    "print-icon": "print",
+  };
+  for (const [className, name] of Object.entries(classMap)) {
+    for (const element of $all(`.${className}`)) {
+      if (!element.querySelector(".icon") && element.tagName !== "svg") element.innerHTML = icon(name);
+    }
+  }
+  for (const element of $all("#clearSearch, .close-filter, .close-drawer, .modal-close")) {
+    if (!element.querySelector(".icon")) element.innerHTML = icon("close");
+  }
+}
+
+function departmentById(id) {
+  return DEPARTMENTS.find((department) => department.id === id) || null;
+}
+
+function departmentForProduct(product) {
+  return DEPARTMENTS.find((department) => department.match(product)) || null;
+}
+
+function categoryIcon(category) {
+  const product = { category: category || "" };
+  return departmentForProduct(product)?.icon || "grid";
+}
+
+function imageMarkup(product, className = "") {
+  const fallback = `<div class="product-placeholder ${className}">${icon(categoryIcon(product.category))}</div>`;
+  if (!product.image) return fallback;
+  return `${fallback}<img src="${escapeHtml(product.image)}" alt="${escapeHtml(product.name)}" loading="lazy" decoding="async" />`;
+}
+
+function loadSavedQuote() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("maliksQuoteListV1") || "[]");
+    return Array.isArray(saved) ? saved.filter((line) => Number.isFinite(Number(line.id)) && Number(line.qty) > 0).map((line) => ({ id: Number(line.id), qty: Math.max(1, Number(line.qty)) })) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveQuote() {
+  localStorage.setItem("maliksQuoteListV1", JSON.stringify(state.quote));
+}
+
+function totalQuoteUnits() {
+  return state.quote.reduce((total, line) => total + line.qty, 0);
+}
+
+function quoteText() {
+  const lines = ["Maliks Paint and Hardware — quote list", "", ...state.quote.map((line, index) => {
+    const product = state.products.find((item) => item.id === line.id);
+    return product ? `${index + 1}. ${product.name} | Code: ${product.code} | Qty: ${line.qty} | Category: ${product.category}` : "";
+  }).filter(Boolean)];
+  lines.push("", "Prices, quantities and availability to be confirmed with the Maliks team.");
+  return lines.join("\n");
+}
+
+function renderDepartmentCards() {
+  const counts = new Map(DEPARTMENTS.map((department) => [department.id, 0]));
+  for (const product of state.products) {
+    const department = departmentForProduct(product);
+    if (department) counts.set(department.id, counts.get(department.id) + 1);
+  }
+  $("#departmentCards").innerHTML = DEPARTMENTS.map((department) => `
+    <button class="department-card" type="button" data-department="${department.id}">
+      <span class="icon-wrap">${icon(department.icon)}</span>
+      <span><h3>${escapeHtml(department.name)}</h3><p>${counts.get(department.id).toLocaleString()} catalogue items</p></span>
+    </button>
+  `).join("");
+}
+
+function renderDepartmentMenu() {
+  $("#departmentMenu").innerHTML = DEPARTMENTS.map((department) => `
+    <a href="#catalogue" data-menu-department="${department.id}">${icon(department.icon)}<span>${escapeHtml(department.name)}</span></a>
+  `).join("");
+}
+
+function renderDepartmentFilters() {
+  const counts = new Map(DEPARTMENTS.map((department) => [department.id, 0]));
+  let uncategorised = 0;
+  for (const product of state.products) {
+    const department = departmentForProduct(product);
+    if (department) counts.set(department.id, counts.get(department.id) + 1);
+    else uncategorised += 1;
+  }
+  const all = state.products.length;
+  $("#departmentFilters").innerHTML = [
+    `<button class="department-filter ${state.department === "" ? "is-active" : ""}" type="button" data-filter-department=""><span>All catalogue</span><small>${all.toLocaleString()}</small></button>`,
+    ...DEPARTMENTS.map((department) => `<button class="department-filter ${state.department === department.id ? "is-active" : ""}" type="button" data-filter-department="${department.id}"><span>${escapeHtml(department.shortName)}</span><small>${counts.get(department.id).toLocaleString()}</small></button>`),
+    uncategorised ? `<button class="department-filter ${state.department === "other" ? "is-active" : ""}" type="button" data-filter-department="other"><span>Other catalogue</span><small>${uncategorised.toLocaleString()}</small></button>` : "",
+  ].join("");
+}
+
+function renderCategorySelect() {
+  const counts = new Map();
+  for (const product of state.products) counts.set(product.category, (counts.get(product.category) || 0) + 1);
+  const categories = Array.from(counts.entries()).sort((a, b) => a[0].localeCompare(b[0]));
+  $("#categorySelect").innerHTML = `<option value="">All categories</option>${categories.map(([category, count]) => `<option value="${escapeHtml(category)}" ${state.category === category ? "selected" : ""}>${escapeHtml(category)} (${count.toLocaleString()})</option>`).join("")}`;
+}
+
+function productMatchesDepartment(product) {
+  if (!state.department) return true;
+  if (state.department === "other") return !departmentForProduct(product);
+  return departmentById(state.department)?.match(product) || false;
+}
+
+function filteredProducts() {
+  const terms = state.query.toLowerCase().trim().split(/\s+/).filter(Boolean);
+  const filtered = state.products.filter((product) => {
+    if (state.category && product.category !== state.category) return false;
+    if (!productMatchesDepartment(product)) return false;
+    if (!terms.length) return true;
+    const haystack = `${product.name} ${product.code} ${product.description} ${product.category}`.toLowerCase();
+    return terms.every((term) => haystack.includes(term));
+  });
+
+  return filtered.sort((a, b) => {
+    if (state.sort === "name") return a.name.localeCompare(b.name);
+    if (state.sort === "category") return a.category.localeCompare(b.category) || a.name.localeCompare(b.name);
+    if (state.sort === "newest") return b.id - a.id;
+    return Number(Boolean(b.image)) - Number(Boolean(a.image)) || b.id - a.id;
+  });
+}
+
+function productCard(product) {
+  const inQuote = state.quote.some((line) => line.id === product.id);
+  return `
+    <article class="product-card" data-product-id="${product.id}">
+      <div class="product-image">
+        ${imageMarkup(product)}
+        <span class="product-badge">Catalogue</span>
+        <button class="quick-view" type="button" data-quick-view="${product.id}" aria-label="View ${escapeHtml(product.name)}">${icon("eye")}</button>
+      </div>
+      <div class="product-copy">
+        <span class="product-category">${escapeHtml(product.category)}</span>
+        <h3 class="product-title">${escapeHtml(product.name)}</h3>
+        <span class="product-code">${escapeHtml(product.code)}</span>
+        <div class="product-footer">
+          <span class="price-note">Price on request</span>
+          <button class="add-quote ${inQuote ? "is-added" : ""}" type="button" data-add-quote="${product.id}">${icon(inQuote ? "check" : "plus")}<span>${inQuote ? "Added" : "Add to quote"}</span></button>
+        </div>
+      </div>
+    </article>
+  `;
+}
+
+function renderSkeletons() {
+  $("#productGrid").innerHTML = Array.from({ length: 6 }, () => `<div class="skeleton-card"><div class="skeleton-block skeleton-image"></div><div class="skeleton-copy"><div class="skeleton-block skeleton-line short"></div><div class="skeleton-block skeleton-line long"></div><div class="skeleton-block skeleton-line short"></div></div></div>`).join("");
+}
+
+function renderPagination(totalPages) {
+  const pagination = $("#pagination");
+  if (totalPages <= 1) {
+    pagination.innerHTML = "";
+    return;
+  }
+  const pages = new Set([1, totalPages, state.page, state.page - 1, state.page + 1].filter((page) => page > 0 && page <= totalPages));
+  const ordered = Array.from(pages).sort((a, b) => a - b);
+  const parts = [];
+  if (state.page > 1) parts.push(`<button class="page-button" type="button" data-page="${state.page - 1}" aria-label="Previous page">${icon("chevron")}</button>`);
+  let previous = 0;
+  for (const page of ordered) {
+    if (previous && page - previous > 1) parts.push(`<span class="page-ellipsis">…</span>`);
+    parts.push(`<button class="page-button ${page === state.page ? "is-active" : ""}" type="button" data-page="${page}" ${page === state.page ? 'aria-current="page"' : ""}>${page}</button>`);
+    previous = page;
+  }
+  if (state.page < totalPages) parts.push(`<button class="page-button" type="button" data-page="${state.page + 1}" aria-label="Next page">${icon("chevron", "next-chevron")}</button>`);
+  pagination.innerHTML = parts.join("");
+  const next = pagination.querySelector(".next-chevron");
+  if (next) next.style.transform = "rotate(-90deg)";
+  const previousButton = pagination.querySelector('[aria-label="Previous page"] .icon');
+  if (previousButton) previousButton.style.transform = "rotate(90deg)";
+}
+
+function renderActiveFilter() {
+  const labels = [];
+  if (state.query) labels.push(`Search: “${state.query}”`);
+  if (state.department) labels.push(departmentById(state.department)?.name || "Other catalogue");
+  if (state.category) labels.push(state.category);
+  const element = $("#activeFilter");
+  const activeCount = labels.length;
+  $("#filterActiveCount").hidden = activeCount === 0;
+  $("#filterActiveCount").textContent = String(activeCount);
+  if (!labels.length) {
+    element.hidden = true;
+    element.innerHTML = "";
+    return;
+  }
+  element.hidden = false;
+  element.innerHTML = `<span>${escapeHtml(labels.join(" · "))}</span><button type="button" id="clearAllActive" aria-label="Clear active filters">${icon("close")}</button>`;
+}
+
+function renderCatalogue() {
+  if (!state.loaded) return;
+  const filtered = filteredProducts();
+  const totalPages = Math.max(1, Math.ceil(filtered.length / state.pageSize));
+  state.page = Math.min(state.page, totalPages);
+  const start = (state.page - 1) * state.pageSize;
+  const visible = filtered.slice(start, start + state.pageSize);
+  $("#productGrid").classList.toggle("list-view", state.view === "list");
+  $("#productGrid").innerHTML = visible.map(productCard).join("");
+  $("#emptyState").hidden = filtered.length > 0;
+  $("#pagination").hidden = filtered.length === 0;
+  $("#resultCount").textContent = filtered.length ? `Showing ${(start + 1).toLocaleString()}–${Math.min(start + visible.length, filtered.length).toLocaleString()} of ${filtered.length.toLocaleString()}` : "0 results";
+  $("#resultCount").nextElementSibling.textContent = state.query || state.department || state.category ? "matching products" : "products in the current view";
+  renderPagination(totalPages);
+  renderActiveFilter();
+  renderDepartmentFilters();
+  renderCategorySelect();
+  attachImageFallbacks();
+  syncUrl();
+}
+
+function attachImageFallbacks() {
+  for (const image of $all("img")) {
+    if (image.dataset.fallbackBound) continue;
+    image.dataset.fallbackBound = "1";
+    image.addEventListener("error", () => image.remove());
+  }
+}
+
+function syncUrl() {
+  const params = new URLSearchParams();
+  if (state.query) params.set("q", state.query);
+  if (state.department) params.set("department", state.department);
+  if (state.category) params.set("category", state.category);
+  if (state.sort !== "featured") params.set("sort", state.sort);
+  const query = params.toString();
+  const url = `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash || ""}`;
+  window.history.replaceState({}, "", url);
+}
+
+function readUrlState() {
+  const params = new URLSearchParams(window.location.search);
+  state.query = params.get("q") || "";
+  state.department = params.get("department") || "";
+  state.category = params.get("category") || "";
+  state.sort = ["featured", "name", "category", "newest"].includes(params.get("sort")) ? params.get("sort") : "featured";
+  $("#globalSearch").value = state.query;
+  $("#clearSearch").hidden = !state.query;
+  $("#sortSelect").value = state.sort;
+}
+
+function setFilters(next = {}, shouldScroll = false) {
+  if (Object.prototype.hasOwnProperty.call(next, "query")) state.query = next.query;
+  if (Object.prototype.hasOwnProperty.call(next, "department")) state.department = next.department;
+  if (Object.prototype.hasOwnProperty.call(next, "category")) state.category = next.category;
+  state.page = 1;
+  $("#globalSearch").value = state.query;
+  $("#clearSearch").hidden = !state.query;
+  if (shouldScroll) $("#catalogue").scrollIntoView({ behavior: "smooth", block: "start" });
+  renderCatalogue();
+}
+
+function openQuote() {
+  $("#quoteDrawer").classList.add("is-open");
+  $("#quoteDrawer").setAttribute("aria-hidden", "false");
+  $("#scrim").hidden = false;
+  document.body.classList.add("drawer-open");
+  closeFilters();
+}
+
+function closeQuote() {
+  $("#quoteDrawer").classList.remove("is-open");
+  $("#quoteDrawer").setAttribute("aria-hidden", "true");
+  $("#scrim").hidden = true;
+  document.body.classList.remove("drawer-open");
+}
+
+function openFilters() {
+  $("#filterPanel").classList.add("is-open");
+  $("#scrim").hidden = false;
+  document.body.classList.add("drawer-open");
+  closeQuote();
+  $("#filterPanel").classList.add("is-open");
+  $("#scrim").hidden = false;
+  document.body.classList.add("drawer-open");
+}
+
+function closeFilters() {
+  $("#filterPanel").classList.remove("is-open");
+  if (!$("#quoteDrawer").classList.contains("is-open")) {
+    $("#scrim").hidden = true;
+    document.body.classList.remove("drawer-open");
+  }
+}
+
+function addToQuote(id) {
+  const existing = state.quote.find((line) => line.id === id);
+  if (existing) existing.qty += 1;
+  else state.quote.push({ id, qty: 1 });
+  saveQuote();
+  renderQuote();
+  renderCatalogue();
+  const product = state.products.find((item) => item.id === id);
+  showDrawerStatus(product ? `${product.name} added to your quote list.` : "Added to your quote list.");
+}
+
+function removeFromQuote(id) {
+  state.quote = state.quote.filter((line) => line.id !== id);
+  saveQuote();
+  renderQuote();
+  renderCatalogue();
+}
+
+function changeQuoteQuantity(id, delta) {
+  const line = state.quote.find((item) => item.id === id);
+  if (!line) return;
+  line.qty += delta;
+  if (line.qty < 1) removeFromQuote(id);
+  else { saveQuote(); renderQuote(); }
+}
+
+function renderQuote() {
+  const count = state.quote.length;
+  $("#quoteCount").textContent = String(count);
+  $("#quoteItemTotal").textContent = String(totalQuoteUnits());
+  const items = $("#quoteItems");
+  if (!count) {
+    items.innerHTML = `<div class="quote-empty">${icon("quote")}<strong>Your quote list is empty</strong><p>Add catalogue items here while you browse. You can copy or download the list when you are ready.</p></div>`;
+    $("#copyQuote").disabled = true;
+    $("#downloadQuote").disabled = true;
+    $("#printQuote").disabled = true;
+    return;
+  }
+  $("#copyQuote").disabled = false;
+  $("#downloadQuote").disabled = false;
+  $("#printQuote").disabled = false;
+  items.innerHTML = state.quote.map((line) => {
+    const product = state.products.find((item) => item.id === line.id);
+    if (!product) return "";
+    return `<div class="quote-line"><div class="quote-line-image">${imageMarkup(product)}</div><div class="quote-line-copy"><strong>${escapeHtml(product.name)}</strong><span>${escapeHtml(product.code)}</span></div><div class="quote-line-actions"><button class="remove-line" type="button" data-remove-quote="${product.id}">Remove</button><div class="quantity-control"><button type="button" aria-label="Decrease quantity" data-quantity="${product.id}" data-delta="-1">${icon("minus")}</button><span>${line.qty}</span><button type="button" aria-label="Increase quantity" data-quantity="${product.id}" data-delta="1">${icon("plus")}</button></div></div></div>`;
+  }).join("");
+  attachImageFallbacks();
+}
+
+function showDrawerStatus(message) {
+  $("#drawerStatus").textContent = message;
+  window.clearTimeout(showDrawerStatus.timer);
+  showDrawerStatus.timer = window.setTimeout(() => { $("#drawerStatus").textContent = ""; }, 3400);
+}
+
+function openProductModal(id) {
+  const product = state.products.find((item) => item.id === id);
+  if (!product) return;
+  state.modalProductId = id;
+  $("#modalProductImage").innerHTML = imageMarkup(product);
+  $("#productModalCategory").textContent = product.category;
+  $("#productModalTitle").textContent = product.name;
+  $("#productModalCode").textContent = product.code;
+  $("#productModalDescription").textContent = product.description || "Catalogue product. Ask the Maliks team for current pricing, quantities and availability.";
+  $("#modalAddQuote").innerHTML = `${icon(state.quote.some((line) => line.id === id) ? "check" : "quote")}<span>${state.quote.some((line) => line.id === id) ? "Added to quote list" : "Add to quote list"}</span>`;
+  $("#productModal").hidden = false;
+  document.body.classList.add("modal-open");
+  attachImageFallbacks();
+}
+
+function closeProductModal() {
+  $("#productModal").hidden = true;
+  document.body.classList.remove("modal-open");
+  state.modalProductId = null;
+}
+
+function copyQuoteList() {
+  const text = quoteText();
+  if (!state.quote.length) return;
+  navigator.clipboard?.writeText(text).then(() => showDrawerStatus("Quote list copied to your clipboard.")).catch(() => showDrawerStatus("Copy is unavailable here. Use Download list instead."));
+}
+
+function downloadQuoteList() {
+  if (!state.quote.length) return;
+  const blob = new Blob([quoteText()], { type: "text/plain;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement("a");
+  link.href = url;
+  link.download = "maliks-quote-list.txt";
+  link.click();
+  URL.revokeObjectURL(url);
+  showDrawerStatus("Quote list downloaded.");
+}
+
+function printQuoteList() {
+  if (!state.quote.length) return;
+  $("#printDate").textContent = `Prepared ${new Intl.DateTimeFormat("en-ZA", { dateStyle: "long" }).format(new Date())}`;
+  $("#printLines").innerHTML = state.quote.map((line) => {
+    const product = state.products.find((item) => item.id === line.id);
+    return product ? `<div class="print-line"><strong>${escapeHtml(product.name)}<br /><span>${escapeHtml(product.category)}</span></strong><span>${escapeHtml(product.code)}</span><span>Qty: ${line.qty}</span></div>` : "";
+  }).join("");
+  window.print();
+}
+
+function toggleDepartmentMenu() {
+  const button = $("#departmentToggle");
+  const menu = $("#departmentMenu");
+  const open = button.getAttribute("aria-expanded") === "true";
+  button.setAttribute("aria-expanded", String(!open));
+  menu.hidden = open;
+}
+
+async function loadProducts() {
+  renderSkeletons();
+  try {
+    const response = await fetch("data/products.json", { cache: "no-store" });
+    if (!response.ok) throw new Error(`Catalogue request failed: ${response.status}`);
+    const payload = await response.json();
+    state.products = Array.isArray(payload.products) ? payload.products : [];
+    state.loaded = true;
+    renderDepartmentCards();
+    renderDepartmentMenu();
+    renderCatalogue();
+    renderQuote();
+  } catch (error) {
+    console.error(error);
+    $("#productGrid").innerHTML = `<div class="empty-state"><div class="empty-icon">${icon("info")}</div><h3>Catalogue temporarily unavailable</h3><p>Refresh the page to load the latest product range.</p><button class="button button-primary" type="button" onclick="window.location.reload()">Refresh catalogue</button></div>`;
+    $("#resultCount").textContent = "Catalogue unavailable";
+  }
+}
+
+function bindEvents() {
+  $("#globalSearch").addEventListener("input", (event) => setFilters({ query: event.target.value }));
+  $("#clearSearch").addEventListener("click", () => setFilters({ query: "" }));
+  $("#sortSelect").addEventListener("change", (event) => { state.sort = event.target.value; state.page = 1; renderCatalogue(); });
+  $("#categorySelect").addEventListener("change", (event) => setFilters({ category: event.target.value }));
+  $("#departmentToggle").addEventListener("click", toggleDepartmentMenu);
+  $("#openQuote").addEventListener("click", openQuote);
+  $("#openQuoteFromHelp").addEventListener("click", openQuote);
+  $("#closeQuote").addEventListener("click", closeQuote);
+  $("#scrim").addEventListener("click", () => { closeQuote(); closeFilters(); });
+  $("#openFilters").addEventListener("click", openFilters);
+  $("#closeFilters").addEventListener("click", closeFilters);
+  $("#clearDepartment").addEventListener("click", () => setFilters({ department: "" }));
+  $("#resetSearch").addEventListener("click", () => setFilters({ query: "", department: "", category: "" }));
+  $("#closeProductModal").addEventListener("click", closeProductModal);
+  $("#productModal").addEventListener("click", (event) => { if (event.target === $("#productModal")) closeProductModal(); });
+  $("#modalAddQuote").addEventListener("click", () => { if (state.modalProductId != null) { addToQuote(state.modalProductId); openProductModal(state.modalProductId); } });
+  $("#copyQuote").addEventListener("click", copyQuoteList);
+  $("#downloadQuote").addEventListener("click", downloadQuoteList);
+  $("#printQuote").addEventListener("click", printQuoteList);
+  $("#gridView").addEventListener("click", () => { state.view = "grid"; $("#gridView").classList.add("is-active"); $("#listView").classList.remove("is-active"); renderCatalogue(); });
+  $("#listView").addEventListener("click", () => { state.view = "list"; $("#listView").classList.add("is-active"); $("#gridView").classList.remove("is-active"); renderCatalogue(); });
+  for (const element of $all("[data-show-all]")) element.addEventListener("click", () => setFilters({ department: "", category: "" }, true));
+
+  document.addEventListener("click", (event) => {
+    const target = event.target.closest("button, a");
+    if (!target) return;
+    const department = target.dataset.department || target.dataset.menuDepartment;
+    if (department) {
+      event.preventDefault();
+      setFilters({ department, category: "" }, true);
+      $("#departmentToggle").setAttribute("aria-expanded", "false");
+      $("#departmentMenu").hidden = true;
+      closeFilters();
+      return;
+    }
+    if (target.dataset.filterDepartment != null) {
+      setFilters({ department: target.dataset.filterDepartment, category: "" });
+      return;
+    }
+    if (target.dataset.addQuote) { addToQuote(Number(target.dataset.addQuote)); return; }
+    if (target.dataset.quickView) { openProductModal(Number(target.dataset.quickView)); return; }
+    if (target.dataset.removeQuote) { removeFromQuote(Number(target.dataset.removeQuote)); return; }
+    if (target.dataset.quantity) { changeQuoteQuantity(Number(target.dataset.quantity), Number(target.dataset.delta)); return; }
+    if (target.dataset.page) { state.page = Number(target.dataset.page); renderCatalogue(); $("#catalogue").scrollIntoView({ behavior: "smooth", block: "start" }); return; }
+    if (target.id === "clearAllActive") { setFilters({ query: "", department: "", category: "" }); return; }
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key !== "Escape") return;
+    closeQuote();
+    closeFilters();
+    closeProductModal();
+  });
+}
+
+function init() {
+  hydrateStaticIcons();
+  readUrlState();
+  state.quote = loadSavedQuote();
+  bindEvents();
+  loadProducts();
+}
+
+init();

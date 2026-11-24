@@ -1,11 +1,194 @@
-<!doctype html><html lang="en-ZA"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#00549e"><meta name="description" content="Browse the Maliks Paint & Hardware PowerBuild product catalogue and build your quotation request."><title>Maliks Paint & Hardware | PowerBuild</title><link rel="icon" href="assets/favicon.png"><link rel="stylesheet" href="styles.css"><script defer src="assets/catalogue.js"></script><script defer src="config.js"></script><script defer src="app.js"></script></head><body>
-<div class="topline"><div class="wrap topinner"><span>YOUR HARDWARE & HOME IMPROVEMENT PARTNER</span><span>South Africa &nbsp; | &nbsp; <a href="#help">Customer assistance</a></span></div></div>
-<header class="header"><div class="wrap headmain"><a class="brand" href="#home" aria-label="Maliks Paint and Hardware home"><img src="assets/logo.png" alt="PowerBuild"><span><b>MALIKS</b><small>PAINT & HARDWARE</small></span></a><form id="searchForm" class="search"><input id="search" type="search" placeholder="Search products, brands or stock codes..." aria-label="Search catalogue"><button aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 5 5"/></svg></button></form><button id="quoteOpen" class="quote-open"><svg viewBox="0 0 24 24"><path d="M3 4h2l2.5 12h12l2-9H6M9 21h.01M18 21h.01"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/></svg><span>My quote<small>Quotation list</small></span><b id="quoteCount">0</b></button></div><div class="nav"><div class="wrap navinner"><button id="departmentToggle" aria-expanded="false" class="department-toggle"><span>☰</span> SHOP BY DEPARTMENT <span>⌄</span></button><nav aria-label="Main navigation"><a href="#home">Home</a><a href="#products">All products</a><a href="#categories">Departments</a><a href="#help">About & help</a></nav><span class="nav-right">BUILD • RENOVATE • IMPROVE</span><div id="departmentMenu" class="department-menu" hidden></div></div></div></header>
-<main id="home"><div class="wrap"><section class="hero"><div class="hero-copy"><span class="eyebrow">POWERBUILD · MALIKS PAINT & HARDWARE</span><h1>BUILD IT.<br>MAKE IT <em>BETTER.</em></h1><p>Explore our hardware, paint, tools and home improvement catalogue. Find the right products for your next project.</p><a class="button yellow" href="#products">Explore products <span>→</span></a><div class="hero-count"><b id="heroTotal">2,554</b> catalogue products <span>•</span> Retail & trade enquiries</div></div><div class="hero-art" id="heroArt" aria-hidden="true"></div></section>
-<div class="benefits"><div><span class="benefit-icon">▦</span><span><b>Explore our range</b><small>Browse by department</small></span></div><div><span class="benefit-icon">⌕</span><span><b>Find the right product</b><small>Search by name or code</small></span></div><div><span class="benefit-icon">▤</span><span><b>Build a quotation</b><small>Add items and quantities</small></span></div><div><span class="benefit-icon">✓</span><span><b>Retail & trade</b><small>For projects big and small</small></span></div></div>
-<section id="categories" class="section"><div class="section-head"><div><span class="kicker">FIND WHAT YOU NEED</span><h2>Shop by department</h2></div><a href="#products" class="textlink" id="allCategories">View all products →</a></div><div id="categoryTiles" class="category-tiles"></div></section>
-<section id="products" class="section catalogue"><div class="section-head"><div><span class="kicker">OUR PRODUCT CATALOGUE</span><h2 id="listingTitle">Explore our products</h2></div><span id="resultCount" class="muted"></span></div><div class="catalogue-layout"><aside class="filters"><div class="filter-title">Departments <button id="clearFilters" class="textlink">Reset</button></div><div id="filters"></div></aside><div class="listing"><div class="toolbar"><label class="mobile-filter">Department <select id="mobileDept" aria-label="Filter by department"></select></label><span id="activeFilter">All products</span><label class="sort">Sort by <select id="sort"><option value="featured">Featured</option><option value="name">Name: A–Z</option><option value="name-desc">Name: Z–A</option><option value="code">Stock code</option></select></label></div><div id="grid" class="product-grid" aria-live="polite"></div><div id="pagination" class="pagination"></div></div></div></section></div>
-<section id="help" class="help"><div class="wrap help-inner"><div><span class="kicker">MALIKS PAINT & HARDWARE</span><h2>Ready for your next project?</h2><p>Find your products, build a quotation list and share it with your Maliks Paint & Hardware sales representative. Prices and availability are confirmed by your store.</p></div><button class="button yellow" id="helpQuote">Open my quotation →</button></div></section></main>
-<footer><div class="wrap footer-inner"><div class="footer-brand"><img src="assets/logo.png" alt="PowerBuild"><div><b>MALIKS PAINT & HARDWARE</b><p>Your hardware & home improvement partner.</p></div></div><div><b>Explore</b><a href="#home">Home</a><a href="#categories">Departments</a><a href="#products">Product catalogue</a></div><div><b>Customer information</b><p>Catalogue only. Images may be representative.<br>Prices and stock availability on request.</p><p id="contactText"></p></div></div><div class="wrap footer-bottom">© <span id="year"></span> Maliks Paint & Hardware. &nbsp; All rights reserved.</div></footer>
-<dialog id="productDialog" class="product-dialog"><button class="close" data-close="productDialog" aria-label="Close product">×</button><div id="productDetail"></div></dialog>
-<dialog id="quoteDialog" class="quote-dialog"><div class="drawer-header"><div><span class="kicker">MALIKS PAINT & HARDWARE</span><h2>My quotation list</h2></div><button class="close" data-close="quoteDialog" aria-label="Close quotation">×</button></div><div id="quoteItems"></div><form id="quoteForm"><h3>Quotation details</h3><label>Name<input id="customerName" autocomplete="name" placeholder="Your name"></label><label>Phone<input id="customerPhone" type="tel" autocomplete="tel" placeholder="Your contact number"></label><label>Fulfilment<select id="fulfilment"><option>Collection</option><option>Delivery</option></select></label><label id="addressLabel" hidden>Delivery address<textarea id="address" rows="2" placeholder="Delivery address"></textarea></label><label>Notes<textarea id="notes" rows="2" placeholder="Optional requirements"></textarea></label><p class="muted" id="quoteNotice">This is a quotation request, not a paid order.</p><div class="quote-actions"><button type="button" class="button primary" id="whatsapp">Share via WhatsApp</button><button type="button" class="button outline" id="downloadQuote">Download list</button><button type="button" class="button outline" id="copyQuote">Copy list</button></div></form></dialog><div id="toast" role="status" class="toast" hidden></div><noscript><p>Please enable JavaScript to browse our catalogue.</p></noscript></body></html>
+<!doctype html>
+<html lang="en-ZA">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#075ca9" />
+    <meta name="description" content="Explore the Maliks Paint and Hardware catalogue powered by PowerBuild." />
+    <title>Maliks Paint and Hardware | Catalogue</title>
+    <link rel="icon" type="image/png" href="assets/powerbuild-logo.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="utility-bar">
+      <div class="container utility-inner">
+        <span><strong>Maliks Paint and Hardware</strong> · Your project starts here</span>
+        <span class="utility-links"><a href="#departments">Departments</a><a href="#catalogue">Catalogue</a><a href="#quote-help">Trade &amp; project quotes</a></span>
+      </div>
+    </div>
+
+    <header class="site-header" id="top">
+      <div class="container header-main">
+        <a class="brand" href="#top" aria-label="Maliks Paint and Hardware home">
+          <img src="assets/powerbuild-logo.png" alt="PowerBuild" />
+          <span class="brand-copy"><strong>Maliks</strong><small>PAINT &amp; HARDWARE</small></span>
+        </a>
+
+        <div class="global-search">
+          <span class="search-icon" aria-hidden="true"></span>
+          <label class="sr-only" for="globalSearch">Search the catalogue</label>
+          <input id="globalSearch" type="search" autocomplete="off" placeholder="What are you looking for? Try ‘drill’, ‘tap’ or a product code" />
+          <button class="clear-search icon-button" id="clearSearch" type="button" aria-label="Clear search" hidden></button>
+        </div>
+
+        <div class="header-actions">
+          <button class="header-action quote-trigger" id="openQuote" type="button" aria-label="Open quote list">
+            <span class="header-action-icon quote-icon" aria-hidden="true"></span>
+            <span class="header-action-label">Quote list</span>
+            <span class="quote-count" id="quoteCount">0</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="nav-shell">
+        <div class="container nav-row">
+          <button class="department-toggle" id="departmentToggle" type="button" aria-expanded="false">
+            <span class="menu-icon" aria-hidden="true"></span>
+            <span>Shop by department</span>
+            <span class="chevron-icon" aria-hidden="true"></span>
+          </button>
+          <nav class="primary-nav" aria-label="Main navigation">
+            <a href="#catalogue">Shop catalogue</a>
+            <a href="#departments">Departments</a>
+            <a href="#quote-help">Project help</a>
+            <a href="#footer">About Maliks</a>
+          </nav>
+          <a class="nav-cta" href="#quote-help">Build a quote <span class="plus-icon" aria-hidden="true"></span></a>
+        </div>
+        <div class="container department-menu" id="departmentMenu" hidden></div>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-labelledby="heroTitle">
+        <div class="container hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow"><span class="eyebrow-dot"></span> The Maliks catalogue</p>
+            <h1 id="heroTitle">Build better.<br /><span>Buy with confidence.</span></h1>
+            <p class="hero-lede">A smarter way to find the paint, hardware, tools, plumbing and building essentials behind your next project.</p>
+            <div class="hero-actions">
+              <a class="button button-primary" href="#catalogue">Explore the catalogue <span class="button-icon grid-icon" aria-hidden="true"></span></a>
+              <a class="button button-ghost" href="#quote-help">Start a project quote <span class="button-icon plus-icon" aria-hidden="true"></span></a>
+            </div>
+            <div class="hero-notes" aria-label="Catalogue benefits">
+              <span><span class="check-icon" aria-hidden="true"></span> Real catalogue products</span>
+              <span><span class="check-icon" aria-hidden="true"></span> Quote-ready product lists</span>
+              <span><span class="check-icon" aria-hidden="true"></span> Built for mobile and desktop</span>
+            </div>
+          </div>
+
+          <div class="hero-visual" aria-label="Selected catalogue products">
+            <div class="hero-orbit orbit-one"></div>
+            <div class="hero-orbit orbit-two"></div>
+            <div class="hero-product product-one">
+              <img src="assets/wholesale-products/p09-22.jpg" alt="Tommy Fix fasteners from the catalogue" />
+              <span class="hero-product-label">Fasteners</span>
+            </div>
+            <div class="hero-product product-two">
+              <img src="assets/wholesale-products/p06-07.jpg" alt="Lockset from the catalogue" />
+              <span class="hero-product-label">Ironmongery</span>
+            </div>
+            <div class="hero-product product-three">
+              <img src="assets/wholesale-products/p03-15.jpg" alt="Plumbing fitting from the catalogue" />
+              <span class="hero-product-label">Plumbing</span>
+            </div>
+            <div class="hero-sticker"><span class="sparkle-icon" aria-hidden="true"></span><strong>Made for</strong><span>every job</span></div>
+            <div class="hero-logo-lockup"><img src="assets/powerbuild-logo.png" alt="PowerBuild logo" /><span>Powered by PowerBuild</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="department-section" id="departments" aria-labelledby="departmentsTitle">
+        <div class="container">
+          <div class="section-heading split-heading">
+            <div><p class="eyebrow eyebrow-blue">Find your next move</p><h2 id="departmentsTitle">Shop by department</h2></div>
+            <button class="text-button" type="button" data-show-all>View the full catalogue <span class="plus-icon" aria-hidden="true"></span></button>
+          </div>
+          <div class="department-cards" id="departmentCards"></div>
+        </div>
+      </section>
+
+      <section class="catalogue-section" id="catalogue" aria-labelledby="catalogueTitle">
+        <div class="container">
+          <div class="section-heading catalogue-heading">
+            <div>
+              <p class="eyebrow eyebrow-blue">The full range</p>
+              <h2 id="catalogueTitle">Explore our catalogue</h2>
+              <p class="section-lede">Search by product name, code or category. Add items to a quote list when you are ready to talk quantities, pricing or delivery.</p>
+            </div>
+            <div class="catalogue-count"><strong id="resultCount">Loading catalogue…</strong><span>products in the current view</span></div>
+          </div>
+
+          <div class="shop-layout">
+            <aside class="filter-panel" id="filterPanel" aria-label="Catalogue filters">
+              <div class="filter-panel-top"><div><span class="filter-kicker">Refine your search</span><h3>Filters</h3></div><button class="icon-button close-filter" id="closeFilters" type="button" aria-label="Close filters"></button></div>
+              <div class="filter-block">
+                <div class="filter-label-row"><span>Department</span><button class="clear-filters" id="clearDepartment" type="button">Clear</button></div>
+                <div class="department-filter-list" id="departmentFilters"></div>
+              </div>
+              <div class="filter-block">
+                <label class="filter-label" for="categorySelect">Catalogue category</label>
+                <div class="select-wrap"><select id="categorySelect"><option value="">All categories</option></select></div>
+              </div>
+              <div class="filter-note"><span class="info-icon" aria-hidden="true"></span><p>Prices and availability can vary by branch. Build a list and ask our team for a current quote.</p></div>
+            </aside>
+
+            <div class="catalogue-results">
+              <div class="results-toolbar">
+                <button class="mobile-filter-button" id="openFilters" type="button"><span class="filter-icon" aria-hidden="true"></span> Filters <span class="filter-active-count" id="filterActiveCount" hidden>0</span></button>
+                <div class="active-filter" id="activeFilter" hidden></div>
+                <div class="toolbar-spacer"></div>
+                <label class="sort-control"><span>Sort</span><div class="select-wrap"><select id="sortSelect"><option value="featured">Recommended</option><option value="name">Name A–Z</option><option value="category">Category</option><option value="newest">Recently added</option></select></div></label>
+                <div class="view-switch" aria-label="View options"><button class="view-button is-active" id="gridView" type="button" aria-label="Grid view"><span class="grid-icon" aria-hidden="true"></span></button><button class="view-button" id="listView" type="button" aria-label="List view"><span class="list-icon" aria-hidden="true"></span></button></div>
+              </div>
+              <div class="product-grid" id="productGrid" aria-live="polite"></div>
+              <div class="empty-state" id="emptyState" hidden><div class="empty-icon search-icon" aria-hidden="true"></div><h3>No catalogue items found</h3><p>Try another search or clear the current filters.</p><button class="button button-primary" type="button" id="resetSearch">Reset search</button></div>
+              <div class="pagination" id="pagination" aria-label="Catalogue pages"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="quote-help" id="quote-help" aria-labelledby="quoteHelpTitle">
+        <div class="container quote-help-card">
+          <div class="quote-help-copy"><p class="eyebrow">For your next project</p><h2 id="quoteHelpTitle">Have a list? Make it quote-ready.</h2><p>Save the products you need as you browse, then copy or download the list for your Maliks sales team. It is a simple starting point for pricing, quantities and branch availability.</p></div>
+          <div class="quote-help-actions"><button class="button button-light" id="openQuoteFromHelp" type="button">Open my quote list <span class="quote-icon" aria-hidden="true"></span></button><a class="button button-outline-light" href="#catalogue">Keep browsing <span class="grid-icon" aria-hidden="true"></span></a></div>
+        </div>
+      </section>
+
+      <section class="service-section" aria-labelledby="serviceTitle">
+        <div class="container">
+          <div class="section-heading"><p class="eyebrow eyebrow-blue">A better way to shop the range</p><h2 id="serviceTitle">Clarity before the counter</h2></div>
+          <div class="service-grid">
+            <article class="service-card"><div class="service-icon blue-icon"><span class="search-icon" aria-hidden="true"></span></div><h3>Find it faster</h3><p>Search across the active Maliks catalogue by product name, code or category.</p></article>
+            <article class="service-card"><div class="service-icon gold-icon"><span class="quote-icon" aria-hidden="true"></span></div><h3>Build your list</h3><p>Collect products into one clean quote list before you contact the team.</p></article>
+            <article class="service-card"><div class="service-icon navy-icon"><span class="store-icon" aria-hidden="true"></span></div><h3>Choose the next step</h3><p>Use your list for branch availability, quantities, pricing and delivery conversations.</p></article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer" id="footer">
+      <div class="container footer-top">
+        <div class="footer-brand"><img src="assets/powerbuild-logo.png" alt="PowerBuild" /><h2>Maliks Paint and Hardware</h2><p>The catalogue is presented with the PowerBuild brand used across the Maliks Group.</p></div>
+        <div class="footer-links"><div><h3>Explore</h3><a href="#catalogue">Shop catalogue</a><a href="#departments">Departments</a><a href="#quote-help">Project quotes</a></div><div><h3>Need help?</h3><p>Save a quote list and take it to your nearest Maliks team for a current price and availability check.</p></div></div>
+      </div>
+      <div class="container footer-bottom"><span>© 2026 Maliks Paint and Hardware</span><span>Powered by PowerBuild</span><a href="#top">Back to top <span class="chevron-up-icon" aria-hidden="true"></span></a></div>
+    </footer>
+
+    <div class="scrim" id="scrim" hidden></div>
+    <aside class="quote-drawer" id="quoteDrawer" aria-label="Quote list" aria-hidden="true">
+      <div class="drawer-header"><div><span class="filter-kicker">Your project list</span><h2>Quote list</h2></div><button class="icon-button close-drawer" id="closeQuote" type="button" aria-label="Close quote list"></button></div>
+      <div class="drawer-body" id="quoteItems"></div>
+      <div class="drawer-footer"><div class="quote-total"><span>Items saved</span><strong id="quoteItemTotal">0</strong></div><div class="drawer-actions"><button class="button button-primary full-width" id="copyQuote" type="button">Copy quote list <span class="copy-icon" aria-hidden="true"></span></button><button class="button button-secondary full-width" id="downloadQuote" type="button">Download list <span class="download-icon" aria-hidden="true"></span></button><button class="button button-quiet full-width" id="printQuote" type="button">Print list <span class="print-icon" aria-hidden="true"></span></button></div><p class="drawer-status" id="drawerStatus" role="status"></p></div>
+    </aside>
+
+    <div class="modal" id="productModal" hidden role="dialog" aria-modal="true" aria-labelledby="productModalTitle">
+      <div class="modal-card product-modal-card"><button class="icon-button modal-close" id="closeProductModal" type="button" aria-label="Close product details"></button><div class="modal-product-image" id="modalProductImage"></div><div class="modal-product-copy"><span class="product-category" id="productModalCategory"></span><h2 id="productModalTitle"></h2><span class="product-code" id="productModalCode"></span><p id="productModalDescription"></p><button class="button button-primary" id="modalAddQuote" type="button">Add to quote list <span class="quote-icon" aria-hidden="true"></span></button></div></div>
+    </div>
+
+    <div class="print-sheet" id="printSheet"><div class="print-brand"><img src="assets/powerbuild-logo.png" alt="PowerBuild" /><div><h1>Maliks Paint and Hardware</h1><p>Project quote list</p></div></div><p class="print-date" id="printDate"></p><div id="printLines"></div><p class="print-note">Prices, quantities and availability to be confirmed with the Maliks team.</p></div>
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
