@@ -835,3 +835,14 @@ select:focus { border-color: var(--blue-600); box-shadow: 0 0 0 3px rgba(10,111,
   .cv-field-full { grid-column: auto; }
   .cv-submit-row .button { width: 100%; }
 }
+
+
+/* Keep navigation labels straight and allow swipe scrolling at every width. */
+.nav-row { min-width: 0; gap: 18px; }
+.department-toggle { flex: 0 0 auto; white-space: nowrap; }
+.primary-nav { flex: 1 1 0; min-width: 0; overflow-x: auto; overflow-y: hidden; flex-wrap: nowrap; white-space: nowrap; overscroll-behavior-x: contain; scrollbar-width: thin; scrollbar-color: rgba(255,255,255,.48) transparent; -webkit-overflow-scrolling: touch; }
+.primary-nav a { flex: 0 0 auto; display: inline-flex; align-items: center; line-height: 1.2; white-space: nowrap; }
+.primary-nav::-webkit-scrollbar { height: 3px; }
+.primary-nav::-webkit-scrollbar-track { background: transparent; }
+.primary-nav::-webkit-scrollbar-thumb { border-radius: 99px; background: rgba(255,255,255,.48); }
+.nav-cta { flex: 0 0 auto; margin-left: 0; white-space: nowrap; }
