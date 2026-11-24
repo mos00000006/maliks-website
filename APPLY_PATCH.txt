@@ -1,0 +1,7 @@
+MALIKS WEBSITE TEAM PATCH
+
+Apply these files to the root of the maliks-website-main repository, merging the assets/team folder with any existing assets folder and replacing index.html and styles.css.
+
+The team names and role titles match the three profiles currently shown on https://maliks.co.za/about/. Three supplied portraits are used for those profiles. The fourth supplied portrait is included as a general team image because the About page does not give a fourth name or title.
+
+This patch contains only the changed page files, the four team images, and this instruction file.
