@@ -2,4 +2,4 @@ MALIKS WEBSITE TEAM PATCH
 
 Extract index.html and styles.css into the root folder of the website repository and replace the existing files.
 
-All four portraits are embedded in index.html so the team photos do not depend on a separate assets folder or relative image paths. Moses Moyana is shown with the second portrait supplied and listed as Web Developer, Designer & IT Support.
+All four portraits are embedded in index.html, so no separate image folder is required. The photos display in circular frames. Moses Moyana uses the black-polo portrait; Mathew Hipler and Moses Moyana are shown with their corrected photos.
