@@ -19,3 +19,4 @@ The map uses OpenStreetMap tiles; branch direction links open Google Maps using 
 - Keeps only the yellow Maliks Paint and Hardware brand line at the top and updates Moses Moyana to Web Developer, Designer, removing IT Support wording.
 - Adds category images for fasteners, ironmongery, and plumbing to the hero area.
 - Replaces the project-moving heading and paragraph with the supplied warehouse photo and keeps “Visit or call the team” above it; branch contact and quote details remain available.
+- Replaces the Careers “Grow with us” M badge with the supplied high-resolution PowerBuild logo.
