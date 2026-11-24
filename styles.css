@@ -312,9 +312,9 @@ img { max-width: 100%; display: block; }
 .client-marquee { position: relative; z-index: 1; overflow: hidden; width: 100%; mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent); }
 .client-logo-track { display: flex; width: max-content; align-items: center; animation: client-logo-scroll 54s linear infinite; will-change: transform; }
 .client-logo-set { display: flex; flex: 0 0 auto; align-items: center; gap: 14px; margin: 0; padding: 8px 7px; list-style: none; }
-.client-logo { flex: 0 0 168px; width: 168px; height: 104px; display: grid; place-items: center; padding: 16px 18px; border: 1px solid rgba(9,39,65,.08); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(0,0,0,.16); transition: transform .2s ease, box-shadow .2s ease; }
+.client-logo { flex: 0 0 168px; width: 168px; height: 104px; display: grid; place-items: center; overflow: hidden; padding: 16px 18px; border: 1px solid rgba(9,39,65,.08); border-radius: 14px; background: #fff; box-shadow: 0 5px 16px rgba(0,0,0,.16); transition: transform .2s ease, box-shadow .2s ease; }
 .client-logo:hover { transform: translateY(-3px); box-shadow: 0 9px 20px rgba(0,0,0,.23); }
-.client-logo img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.client-logo img { display: block; width: auto; height: auto; max-width: 100%; max-height: 64px; object-fit: contain; }
 .client-logo--mono img { filter: brightness(0) saturate(100%) invert(11%) sepia(54%) saturate(1264%) hue-rotate(172deg) brightness(92%) contrast(98%); }
 .client-logo-stage:hover .client-logo-track, .client-logo-stage:focus-within .client-logo-track { animation-play-state: paused; }
 @keyframes client-logo-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
