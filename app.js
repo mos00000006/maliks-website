@@ -23,6 +23,14 @@ const DEPARTMENTS = [
   { id: "home", name: "Home & garden", shortName: "Home & garden", description: "Useful products for around the home", icon: "home", match: (p) => /homeware|garden/i.test(p.category) },
 ];
 
+const MALIKS_RANGE = [
+  { label: "Paint", description: "Colour, preparation and finishing products for every room.", icon: "paint", category: "Paints & Allied" },
+  { label: "Cement & building essentials", description: "Explore building materials, bricks, blocks, timber, boards and more.", icon: "building", department: "building" },
+  { label: "Bricks & Blocks", description: "A strong start for foundations, walls and the next stage of your build.", icon: "building", category: "Bricks & Blocks" },
+  { label: "Electrical", description: "Electrical accessories and lighting for practical, finished spaces.", icon: "bolt", category: "Electrical & Lighting" },
+  { label: "Roofing", description: "Roofing and gutter products to help protect the work below.", icon: "home", category: "Roofing & Gutters" },
+];
+
 const ICON_PATHS = {
   search: '<circle cx="11" cy="11" r="7"></circle><path d="m20 20-4-4"></path>',
   quote: '<path d="M6 3h12v18H6z"></path><path d="M9 7h6M9 11h6M9 15h3"></path><path d="M15 18h3"></path>',
@@ -35,6 +43,8 @@ const ICON_PATHS = {
   list: '<path d="M8 6h12M8 12h12M8 18h12"></path><path d="M4 6h.01M4 12h.01M4 18h.01"></path>',
   check: '<path d="m5 12 4 4L19 6"></path>',
   sparkle: '<path d="m12 3 1.2 5.8L19 10l-5.8 1.2L12 17l-1.2-5.8L5 10l5.8-1.2L12 3Z"></path><path d="m19 16 .5 2.5L22 19l-2.5.5L19 22l-.5-2.5L16 19l2.5-.5L19 16Z"></path>',
+  tag: '<path d="M4 5.5A1.5 1.5 0 0 1 5.5 4H12l8 8-8 8H5.5A1.5 1.5 0 0 1 4 18.5v-13Z"></path><circle cx="8" cy="8" r="1"></circle>',
+  truck: '<path d="M3 6h11v10H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="2"></circle><circle cx="18" cy="18" r="2"></circle>',
   filter: '<path d="M4 6h16M7 12h10M10 18h4"></path>',
   info: '<circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path>',
   store: '<path d="M4 10h16v10H4z"></path><path d="M3 10 5 4h14l2 6M8 10v10M16 10v10"></path>',
@@ -81,6 +91,10 @@ function hydrateStaticIcons() {
     "list-icon": "list",
     "check-icon": "check",
     "sparkle-icon": "sparkle",
+    "building-icon": "building",
+    "tag-icon": "tag",
+    "truck-icon": "truck",
+    "home-icon": "home",
     "filter-icon": "filter",
     "info-icon": "info",
     "store-icon": "store",
@@ -162,6 +176,43 @@ function renderDepartmentMenu() {
   $("#departmentMenu").innerHTML = DEPARTMENTS.map((department) => `
     <a href="#catalogue" data-menu-department="${department.id}">${icon(department.icon)}<span>${escapeHtml(department.name)}</span></a>
   `).join("");
+}
+
+function rangeProducts(range) {
+  const candidates = state.products.filter((product) => {
+    if (range.category) return product.category === range.category;
+    if (range.department) return productMatchesDepartmentFor(product, range.department);
+    return false;
+  });
+  return { product: candidates.find((product) => product.image) || candidates[0] || null, count: candidates.length };
+}
+
+function productMatchesDepartmentFor(product, departmentId) {
+  if (departmentId === "other") return !departmentForProduct(product);
+  return departmentById(departmentId)?.match(product) || false;
+}
+
+function rangeImageMarkup(range, product) {
+  const placeholder = `<div class="range-placeholder">${icon(range.icon)}</div>`;
+  if (!product?.image) return placeholder;
+  return `${placeholder}<img src="${escapeHtml(product.image)}" alt="${escapeHtml(range.label)} from the Maliks catalogue" loading="lazy" decoding="async" />`;
+}
+
+function renderMaliksRange() {
+  const cards = MALIKS_RANGE.map((range) => {
+    const { product, count } = rangeProducts(range);
+    const action = range.category
+      ? `data-range-category="${escapeHtml(range.category)}"`
+      : `data-range-department="${escapeHtml(range.department)}"`;
+    return `
+      <button class="range-card" type="button" ${action}>
+        <span class="range-image">${rangeImageMarkup(range, product)}</span>
+        <span class="range-copy"><span class="range-kicker">${count.toLocaleString()} catalogue items</span><strong>${escapeHtml(range.label)}</strong><small>${escapeHtml(range.description)}</small><span class="range-link">Explore range ${icon("chevron")}</span></span>
+      </button>
+    `;
+  }).join("");
+  $("#rangeCards").innerHTML = cards;
+  attachImageFallbacks();
 }
 
 function renderDepartmentFilters() {
@@ -496,6 +547,7 @@ async function loadProducts() {
     state.loaded = true;
     renderDepartmentCards();
     renderDepartmentMenu();
+    renderMaliksRange();
     renderCatalogue();
     renderQuote();
   } catch (error) {
@@ -539,6 +591,16 @@ function bindEvents() {
       $("#departmentToggle").setAttribute("aria-expanded", "false");
       $("#departmentMenu").hidden = true;
       closeFilters();
+      return;
+    }
+    if (target.dataset.rangeCategory) {
+      event.preventDefault();
+      setFilters({ department: "", category: target.dataset.rangeCategory }, true);
+      return;
+    }
+    if (target.dataset.rangeDepartment) {
+      event.preventDefault();
+      setFilters({ department: target.dataset.rangeDepartment, category: "" }, true);
       return;
     }
     if (target.dataset.filterDepartment != null) {
