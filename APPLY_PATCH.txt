@@ -1,5 +1,5 @@
-MALIKS WEBSITE TEAM PATCH
+MALIKS WEBSITE TEAM AND STORE LOCATOR PATCH
 
-Extract index.html and styles.css into the root folder of the website repository and replace the existing files.
+Extract index.html, styles.css, and app.js into the root folder of the website repository and replace the existing files.
 
-All four portraits are embedded in index.html, so no separate image folder is required. The photos display in circular frames. Moses Moyana uses the black-polo portrait; Mathew Hipler and Moses Moyana are shown with their corrected photos.
+The team section no longer has the “Here to help” callout. The Store Locator section includes 14 PowerBuild branches, a branch/town search, click-to-call numbers, and Google Maps directions links. Team portraits are embedded in index.html and remain circular, so no separate image folder is required.

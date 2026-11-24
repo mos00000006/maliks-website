@@ -572,6 +572,24 @@ async function loadProducts() {
 }
 
 function bindEvents() {
+  const storeSearch = document.querySelector("#storeSearch");
+  if (storeSearch) {
+    storeSearch.addEventListener("input", () => {
+      const query = storeSearch.value.trim().toLowerCase();
+      const cards = $all(".store-card");
+      let visible = 0;
+      for (const card of cards) {
+        const matches = !query || `${card.dataset.search} ${card.textContent}`.toLowerCase().includes(query);
+        card.hidden = !matches;
+        if (matches) visible += 1;
+      }
+      const results = document.querySelector("#storeResults");
+      if (results) results.textContent = query ? `${visible} ${visible === 1 ? "branch" : "branches"} found` : `${visible} branches`;
+      const empty = document.querySelector("#storeEmpty");
+      if (empty) empty.hidden = visible > 0;
+    });
+  }
+
   $("#globalSearch").addEventListener("input", (event) => setFilters({ query: event.target.value }));
   $("#clearSearch").addEventListener("click", () => setFilters({ query: "" }));
   $("#sortSelect").addEventListener("change", (event) => { state.sort = event.target.value; state.page = 1; renderCatalogue(); });
