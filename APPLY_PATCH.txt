@@ -1,6 +1,6 @@
 MALIKS WEBSITE PATCH — TEAM, STORE LOCATOR, AND BRAND MARQUEE
 
-Replace index.html, styles.css, and app.js in the website repository root, add careers.html and careers.js there, and merge the included assets/ folder into the existing website assets/ folder.
+Replace index.html, styles.css, app.js, careers.html, and careers.js in the website repository root. The warehouse, category, and Careers logo images are embedded in the HTML, so they do not depend on copying a separate assets/ folder.
 
 Included updates:
 - Keeps the corrected four-person team section and circular portraits; removes the “Here to help” callout.
