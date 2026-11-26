@@ -13,6 +13,8 @@
   else {const hero=$('main .hero');if(hero)hero.after(card);else return;}
   const css=document.createElement('style');
   css.textContent='.pb-planner-promo{box-sizing:border-box;display:flex;align-items:center;justify-content:space-between;gap:18px;width:min(1170px,calc(100% - 36px));margin:24px auto;padding:20px 24px;background:#f5f7f6;border:1px solid #cdd8da;border-left:4px solid #f3ce3c;border-radius:10px;color:#0c2d46}.pb-planner-promo h2{margin:0;font-size:clamp(21px,3vw,30px);line-height:1.2;color:#0c2d46}.pb-planner-promo p{margin:5px 0 0;font-size:15px;line-height:1.45;color:#415b69}.pb-planner-promo a,.pb-branch-quote,.pb-brick-quote{display:inline-flex;justify-content:center;align-items:center;gap:8px;border:0;border-radius:6px;min-height:42px;padding:9px 15px;background:#0c2d46;color:#fff!important;font:inherit;font-size:14px;font-weight:700;text-decoration:none;cursor:pointer}.pb-planner-promo a{white-space:nowrap}.pb-branch-quote{width:100%;grid-column:1/-1}.pb-branch-quote:disabled{opacity:.5;cursor:default}.pb-brick-quote{margin:0 0 12px}.pb-brick-quote[hidden]{display:none!important}@media(max-width:620px){.pb-planner-promo{flex-direction:column;align-items:flex-start;padding:15px}.pb-planner-promo a{white-space:normal}}';
+  // Keep missing-image placeholders inside their thumbnails and the open drawer above the sticky header.
+  css.textContent += '#quoteDrawer .quote-line-image{position:relative;isolation:isolate;overflow:hidden}#quoteDrawer .quote-line-image .product-placeholder{pointer-events:none}#quoteDrawer.is-open{z-index:1002}body:has(#quoteDrawer.is-open) #scrim{z-index:1001}';
   document.head.append(css);
   const foot=$('footer .footer-links');
   const catalogueLink=foot&&foot.querySelector('a[href="#catalogue"]');
