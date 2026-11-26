@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en-ZA">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#092d49"><meta name="description" content="Work out your building material quantities, compare house-plan fees and request a PowerBuild branch quote.">
+  <title>Bill of Materials | PowerBuild</title>
+  <link rel="icon" href="powerbuild-bom/powerbuild.png"><link rel="stylesheet" href="powerbuild-bom/planner.css">
+  <script src="powerbuild-bom/planner.js" defer></script><script src="powerbuild-bom/app.js" defer></script>
+</head>
+<body>
+<a class="skip" href="#content">Skip to planner</a>
+<header class="mast"><div class="wrap head"><a href="./" class="brand" aria-label="PowerBuild home"><img src="powerbuild-bom/powerbuild.png" alt="PowerBuild" width="54" height="54"></a><span class="brand-rule"></span><a class="home-title" href="bill-of-materials.html">Project planner</a><nav aria-label="Planner navigation"><a class="catalogue-link" href="./#catalogue">Shop catalogue</a><a class="list-nav" href="#list"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5H5v16h14V5h-4M9 3h6v4H9zM8 12h8m-8 4h6"/></svg> My list <span id="saved-count">0</span></a></nav></div></header>
+<main id="content" tabindex="-1">
+<section class="intro" id="intro"><div class="wrap intro-inner"><div class="intro-copy"><div class="eyebrow"><span></span> Building estimates</div><h1>Bill of Materials<span>.</span></h1><p>Measure your project, work out what to buy and take your list to a PowerBuild branch for a quote.</p><a href="#templates" class="button yellow">Explore templates <span aria-hidden="true">↓</span></a></div><img src="powerbuild-bom/drawing.svg" width="460" height="244" class="hero-art" alt="" aria-hidden="true"></div></section>
+<section class="wrap browse" id="templates" aria-labelledby="browse-title"><div class="browse-heading"><h2 id="browse-title" tabindex="-1">Project templates</h2><div class="categories" aria-label="Filter templates"><button type="button" data-group="All" aria-pressed="true">All</button><button type="button" data-group="DIY" aria-pressed="false">DIY</button><button type="button" data-group="Structures" aria-pressed="false">Structures</button><button type="button" data-group="House plans" aria-pressed="false">House plans</button></div></div><div id="cards"></div><aside class="own-plan"><div><h3>Have your own plans?</h3><p>Send your drawings or existing materials list to the project quote desk.</p></div><a class="button outline" href="project-quote.html">Request a project quote <span aria-hidden="true">↗</span></a></aside></section>
+<section class="wrap detail" id="detail" hidden></section><section class="wrap list-view" id="list-view" hidden></section>
+<noscript><div class="wrap"><p>Enable JavaScript to calculate quantities and view plan fees, or use the project quotation form.</p><a href="project-quote.html">Request a project quote</a></div></noscript>
+</main>
+<footer><div class="wrap"><span>PowerBuild · Project planner</span><a href="./#store-locator">Find a branch ↗</a></div></footer>
+<p role="status" class="sr" id="status"></p>
+<dialog id="quote-dialog" aria-labelledby="quote-title"><div class="dialog-head"><strong id="quote-title">Project quotation</strong><button type="button" id="close-dialog" class="text-btn">Close ×</button></div><div class="dialog-body"><p id="quote-progress" role="status">Opening your quotation form…</p><a id="quote-fallback" href="project-quote.html" target="_blank" rel="noopener">Open the full quotation form ↗</a><button type="button" id="copy-handoff" class="text-btn" hidden>Copy materials list</button><textarea id="handoff-copy" aria-label="Material list to copy" readonly hidden></textarea><iframe id="quote-frame" title="PowerBuild project quotation form" hidden></iframe></div></dialog>
+</body></html>
