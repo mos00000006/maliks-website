@@ -12,15 +12,13 @@
     { id: 'roof-paint', name: 'Tiled roof paint', group: 'DIY', kind: 'paint', photo: 7, roof: true, description: 'Roof coating measured over the actual sloping surface.' },
     { id: 'flat-roof-garage', name: 'Flat concrete roof garage', group: 'Structures', kind: 'garage', photo: 8, description: 'Brickwork, mortar, floor and flat roof materials.' }
   ];
-  const plans = [[40, 600], [60, 800], [80, 1000], [100, 1200], [110, 1300]].map(([size, high]) => ({
-    id: 'house-' + size, name: size + ' m² house plan', group: 'House plans', kind: 'plan', size, low: 250, high,
-    description: 'Request plan options and a separate materials quotation.'
+  const plans = [40, 60, 80, 100, 110].map(size => ({
+    id: 'house-' + size, name: size + ' m² house plan', group: 'House plans', kind: 'plan', size,
+    description: 'Explore this floor area and ask Sales about available drawings.'
   }));
   const all = [...templates, ...plans];
   const number = new Intl.NumberFormat('en-ZA', { maximumFractionDigits: 3 });
   const fmt = n => number.format(n);
-  const rand = n => 'R' + new Intl.NumberFormat('en-ZA', { maximumFractionDigits: 0 }).format(n).replace(/[\s\u00a0]/g, ' ');
-  const planFee = t => rand(t.low) + '–' + rand(t.high);
   const field = (key, label, unit, initial = '', min = 0.001, max = 100000, step = 'any', optional = false) => ({ key, label, unit, initial, min, max, step, optional });
   const waste = field('waste', 'Extra allowance', '%', 10, 0, 100);
   const openings = field('openings', 'Doors and windows to deduct', 'm²', 0, 0, 10000000);
@@ -103,7 +101,7 @@
     return { title: t.name, net, areaLabel: garage ? 'Net wall area' : 'Net surface area', waste: v.waste, rows, notes,
       inputs: [...definitions.dims, ...definitions.packs].filter(f => v[f.key] !== null).map(f => f.label + ': ' + fmt(v[f.key]) + (f.key === 'primerCoats' || f.key === 'leaves' ? '' : ' ' + f.unit.replace(', optional',''))) };
   }
-  const api = { all, fields, calculate, planFee, fmt };
+  const api = { all, fields, calculate, fmt };
   root.PowerBuildPlanner = api;
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
 })(typeof window !== 'undefined' ? window : globalThis);
