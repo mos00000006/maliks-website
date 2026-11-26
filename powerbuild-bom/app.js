@@ -8,6 +8,7 @@
   const groupsBySlug = { diy: 'DIY', structures: 'Structures', 'house-plans': 'House plans' };
   const savedKey = 'powerbuildMaterialsList.v1';
   const transferKey = 'powerbuildMaterialsTransfer.v1';
+  const salesMailbox = 'chamdordiy@gmail.com';
   const esc = input => String(input ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;'}[c]));
   const link = id => '#template/' + id;
   let active = null, currentResult = null, group = 'All', quoteCleanup, lastFocus;
@@ -15,10 +16,23 @@
   let storageOK = true;
   try {
     const raw = JSON.parse(localStorage.getItem(savedKey) || '[]');
-    if (Array.isArray(raw)) project = raw.filter(validEntry);
+    if (Array.isArray(raw)) {
+      project = restoreEntries(raw);
+      if (JSON.stringify(raw) !== JSON.stringify(project)) persist();
+    }
   } catch { /* A restricted browser can still use a list within this visit. */ }
   function validEntry(e) {
     return e && typeof e.id === 'string' && typeof e.title === 'string' && typeof e.text === 'string' && (!e.rows || Array.isArray(e.rows));
+  }
+  function planEntry(t) {
+    return {plan:t.id, title:t.name, text:t.name+' — Please quote the available drawings and package options.', meta:'House plan enquiry', type:projectType(t)};
+  }
+  function restoreEntries(raw) {
+    return raw.filter(validEntry).map(entry => {
+      if (!entry.plan) return entry;
+      const plan = P.all.find(t => t.kind === 'plan' && t.id === entry.plan);
+      return plan ? { ...entry, ...planEntry(plan) } : entry;
+    });
   }
   function announce(message) { $('status').textContent = message; }
   function persist() {
@@ -48,8 +62,8 @@
     return '<span class="photo" style="--px:'+((t.photo%3)*50)+'%;--py:'+(Math.floor(t.photo/3)*50)+'%" aria-hidden="true"></span>';
   }
   function card(t) {
-    const fee = t.kind === 'plan' ? P.planFee(t) : 'Free template';
-    return '<a class="card" href="'+link(t.id)+'" aria-label="'+esc(t.name+', '+fee)+'"><div class="thumb">'+artwork(t)+'</div><div class="card-main"><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p></div><div class="card-foot"><span>'+fee+'</span><span>'+(t.kind==='plan' ? 'View plan' : 'Open template')+' ↗</span></div></a>';
+    const action = t.kind === 'plan' ? 'View plan' : 'Open template';
+    return '<a class="card" href="'+link(t.id)+'" aria-label="'+esc(t.name)+'"><div class="thumb">'+artwork(t)+'</div><div class="card-main"><h3>'+esc(t.name)+'</h3><p>'+esc(t.description)+'</p></div><div class="card-foot"><span>'+action+'</span><span aria-hidden="true">↗</span></div></a>';
   }
   function catalogue() {
     $('cards').innerHTML = groups.filter(g=>group==='All'||g===group).map(g=>'<section class="group"><div class="topic-head"><h3>'+g+'</h3></div><div class="cards">'+P.all.filter(t=>t.group===g).map(card).join('')+'</div></section>').join('');
@@ -71,7 +85,7 @@
   function inputData(form) { return Object.fromEntries(new FormData(form).entries()); }
   function renderCalculator(t) {
     const dims=P.fields(t,'dimensions');
-    $('detail').innerHTML='<a class="back" href="#templates">← All templates</a><div class="overline">'+esc(t.group)+' / Free template</div><h1 tabindex="-1">'+esc(t.name)+'</h1><p class="lead">'+esc(t.description)+'</p><div class="detail-layout"><form id="calc-form" class="panel"><h2>Project measurements</h2>'+(t.kind==='garage'?'':'<fieldset class="toggle"><legend class="sr">How will you enter measurements?</legend><label><input type="radio" name="mode" value="dimensions" checked> Dimensions</label><label><input type="radio" name="mode" value="area"> Total area (m²)</label></fieldset>')+'<p class="help">'+(t.kind==='garage'?'Use outside wall dimensions and the roof area from your drawing. Concrete volumes require the slab thicknesses specified on that drawing.':t.roof?'Use the measured sloping roof surface. Measure separate slopes individually or enter the sum of their areas.':t.wall?'For several walls of equal height, add their lengths together. Enter openings once.':'Measure a rectangular section or enter its total area.')+'</p><div class="form-grid" id="dimensions">'+dims.dims.map(fieldMarkup).join('')+'</div><details '+(t.kind==='garage'?'open':'')+' id="specs"><summary>Product sizes and allowance</summary><p class="help">These are starting values. Adjust coverage and pack sizes to match your chosen products.</p><div class="form-grid">'+dims.packs.map(fieldMarkup).join('')+'</div></details><p role="alert" id="calc-error" class="error"></p><button type="submit" class="button navy">Calculate materials <span aria-hidden="true">→</span></button></form><section class="summary sticky" id="estimate-panel" aria-label="Your estimate"></section></div>';
+    $('detail').innerHTML='<a class="back" href="#templates">← All templates</a><div class="overline">'+esc(t.group)+' / Materials calculator</div><h1 tabindex="-1">'+esc(t.name)+'</h1><p class="lead">'+esc(t.description)+'</p><div class="detail-layout"><form id="calc-form" class="panel"><h2>Project measurements</h2>'+(t.kind==='garage'?'':'<fieldset class="toggle"><legend class="sr">How will you enter measurements?</legend><label><input type="radio" name="mode" value="dimensions" checked> Dimensions</label><label><input type="radio" name="mode" value="area"> Total area (m²)</label></fieldset>')+'<p class="help">'+(t.kind==='garage'?'Use outside wall dimensions and the roof area from your drawing. Concrete volumes require the slab thicknesses specified on that drawing.':t.roof?'Use the measured sloping roof surface. Measure separate slopes individually or enter the sum of their areas.':t.wall?'For several walls of equal height, add their lengths together. Enter openings once.':'Measure a rectangular section or enter its total area.')+'</p><div class="form-grid" id="dimensions">'+dims.dims.map(fieldMarkup).join('')+'</div><details '+(t.kind==='garage'?'open':'')+' id="specs"><summary>Product sizes and allowance</summary><p class="help">These are starting values. Adjust coverage and pack sizes to match your chosen products.</p><div class="form-grid">'+dims.packs.map(fieldMarkup).join('')+'</div></details><p role="alert" id="calc-error" class="error"></p><button type="submit" class="button navy">Calculate materials <span aria-hidden="true">→</span></button></form><section class="summary sticky" id="estimate-panel" aria-label="Your estimate"></section></div>';
     const form=$('calc-form'); summaryEmpty();
     let dimensionDraft={};
     form.addEventListener('change', e=>{
@@ -113,9 +127,9 @@
     return t.kind==='garage' ? 'Other project' : 'Home renovation';
   }
   function renderPlan(t) {
-    $('detail').innerHTML='<a href="#templates" class="back">← All templates</a><div class="overline">House plans</div><h1 tabindex="-1">'+esc(t.name)+'</h1><div class="detail-layout"><section class="panel"><h2>Plan overview</h2><div class="large-plan">'+planArt(t, 'detail')+'</div><p class="caption">Illustrative layout. Your branch will confirm the available drawings, room layout and package contents.</p></section><section class="summary"><h2>Plan fee range</h2><p class="fee">'+P.planFee(t)+'</p><p>Materials, delivery and construction are priced separately. Request the available options for this floor area from your branch.</p><div class="actions"><button class="button navy" id="plan-enquiry" type="button">Enquire about this plan →</button></div></section></div>';
+    $('detail').innerHTML='<a href="#templates" class="back">← All templates</a><div class="overline">House plans</div><h1 tabindex="-1">'+esc(t.name)+'</h1><div class="detail-layout"><section class="panel"><h2>Plan overview</h2><div class="large-plan">'+planArt(t, 'detail')+'</div><p class="caption">Illustrative layout. Sales will confirm the available drawings, room layout and package contents.</p></section><section class="summary"><h2>Request this plan</h2><p>Add this plan to your list. You can include building materials in the same quote request.</p><div class="actions"><button class="button navy" id="plan-enquiry" type="button">Add plan to my list +</button></div></section></div>';
     $('plan-enquiry').onclick=()=>{
-      if(!project.some(e=>e.plan===t.id)) addEntry({plan:t.id,title:t.name,text:t.name+' — advertised plan fee '+P.planFee(t)+'. Please confirm plan availability, package contents and final price.',meta:'Plan fee '+P.planFee(t),type:projectType(t)});
+      if(!project.some(e=>e.plan===t.id)) addEntry(planEntry(t));
       location.hash='list';
     };
   }
@@ -129,7 +143,15 @@
     let data;
     try { data=JSON.parse(text); } catch { return; }
     if(typeof data.token!=='string'||typeof data.text!=='string'||!data.text.trim()||data.text.length>120000)return;
-    if(!project.some(e=>e.transfer===data.token)) addEntry({title:'Catalogue quote list',meta:'Products selected in the catalogue',text:data.text,transfer:data.token,type:'General hardware'});
+    const existing = project.find(e => e.transfer);
+    if (existing) {
+      existing.text = data.text;
+      existing.transfer = data.token;
+      project = project.filter(e => !e.transfer || e === existing);
+      persist();
+    } else {
+      addEntry({title:'Catalogue quote list',meta:'Products selected in the catalogue',text:data.text,transfer:data.token,type:'General hardware'});
+    }
     try { sessionStorage.removeItem(transferKey); } catch {}
   }
   let branchChoice='',methodChoice='',extraNotes='';
@@ -138,14 +160,29 @@
     readTransfer();
     const box=$('list-view');
     const title='<a href="#templates" class="back">← All templates</a><div class="overline">Project planner</div><h1 tabindex="-1">My materials list</h1>';
-    if(!project.length){box.innerHTML=title+'<div class="empty"><h2>Your list is empty</h2><p>Choose a template, calculate quantities and add the result here.</p><a href="#templates" class="button navy">Choose a template →</a></div>';return;}
+    if(!project.length){box.innerHTML=title+'<div class="empty"><h2>Your list is empty</h2><p>Pick products from the catalogue, choose a house plan or use a template to calculate quantities.</p><div class="actions"><a href="./#catalogue" class="button navy">Choose catalogue products →</a><a href="#templates" class="button outline">Browse templates</a></div></div>';return;}
     const rows=project.map((e,i)=>'<article class="saved-row"><div class="row-head"><h3>'+esc(e.title)+'</h3><button class="text-btn remove" type="button" data-remove="'+i+'" aria-label="Remove '+esc(e.title)+'">Remove</button></div><p class="help">'+esc(e.meta)+'</p>'+(e.rows?table(e.rows):'<p class="fine" style="white-space:pre-line">'+esc(e.text)+'</p>')+'</article>').join('');
-    box.innerHTML=title+'<p class="lead" id="list-top-copy">Review your quantities and choose the branch you want a price from.</p><div class="detail-layout"><div><h2>Selected items</h2>'+rows+'<div class="actions"><a class="button outline" href="#templates">Add another template</a><button type="button" class="button outline" id="print-list">Print / PDF</button></div></div><form id="branch-form" class="summary"><h2>Request branch pricing</h2><div class="quote-fields"><label class="field">Preferred branch<select id="branch" required>'+branchOptions()+'</select></label><label class="field">Order method<select id="method" required><option value="">Choose delivery or collection</option><option>Collection</option><option>Delivery</option></select></label><label class="field">Project notes (optional)<textarea id="notes" maxlength="1200" placeholder="Site, preferred product or special requirements"></textarea></label></div><p class="help">Your list carries through to the existing quote form, where you can attach drawings and add your contact details.</p><div class="actions"><button class="button navy" type="submit">Continue to quotation →</button></div><p class="print-only" id="print-branch"></p></form></div>';
+    box.innerHTML=title+'<p class="lead" id="list-top-copy">Check your items and quantities. Sales will reply to your email with a priced quotation.</p><div class="detail-layout"><div><h2>Selected items</h2>'+rows+'<div class="actions"><a class="button outline" href="./#catalogue">Add catalogue products</a><a class="button outline" href="#templates">Add another template</a><button type="button" class="button outline" id="print-list">Print / PDF</button></div></div><form id="branch-form" class="summary"><h2>Send to Sales</h2><div class="quote-fields"><label class="field">Preferred branch<select id="branch" required>'+branchOptions()+'</select></label><label class="field">Order method<select id="method" required><option value="">Choose delivery or collection</option><option>Collection</option><option>Delivery</option></select></label><label class="field">Project notes (optional)<textarea id="notes" maxlength="1200" placeholder="Site, preferred product or special requirements"></textarea></label></div><p class="help">Open a draft in your email app, or send your request through the website. You can attach drawings either way.</p><div class="actions"><button class="button navy" type="submit" id="email-sales">Email my list to Sales →</button><button class="button outline" type="button" id="web-quote">Use website form</button></div><p class="help" aria-live="polite" id="email-status"></p><p class="print-only" id="print-branch"></p></form></div>';
     $('method').value=methodChoice; $('notes').value=extraNotes;
     const update=()=>{branchChoice=$('branch').value;methodChoice=$('method').value;extraNotes=$('notes').value;$('print-branch').textContent=[branchChoice,methodChoice,extraNotes].filter(Boolean).join(' · ');};update();
     $('branch-form').addEventListener('input',update); $('print-list').onclick=()=>window.print();
     box.querySelectorAll('[data-remove]').forEach(button=>{button.onclick=()=>{const i=Number(button.dataset.remove);project.splice(i,1);persist();renderList();announce('Item removed.');box.querySelector('h1').focus();};});
-    $('branch-form').onsubmit=e=>{e.preventDefault();update();openQuote();};
+    $('web-quote').onclick=()=>{if($('branch-form').reportValidity()){update();openQuote();}};
+    $('branch-form').onsubmit=e=>{
+      e.preventDefault();
+      update();
+      const subject = 'Quote request — '+branchChoice;
+      const body = 'Hello PowerBuild Sales,\r\n\r\nPlease send me a priced quotation for the list below.\r\n\r\n'+quoteText().replace(/\r?\n/g,'\r\n');
+      const url = 'mailto:'+salesMailbox+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+      // Many mail apps truncate long mailto links. Keep the entire request in the web form.
+      if (url.length > 1900) {
+        $('email-status').textContent='Your list is long. Use the website form to email the full request.';
+        openQuote();
+        return;
+      }
+      $('email-status').textContent='Choose Send in your email app to finish. If a draft does not open, select Use website form.';
+      location.href=url;
+    };
   }
   function quoteText(){return ['PowerBuild project quotation',branchChoice+' · '+methodChoice,'',...project.map((e,i)=>(i+1)+'. '+e.text+'\n'),extraNotes?'Project notes: '+extraNotes:''].filter((x,i)=>x!==''||i===2).join('\n').trim();}
   function openQuote(){
@@ -219,6 +256,6 @@
     $('detail').innerHTML='<a class="back" href="./#catalogue">← Shop catalogue</a><div class="overline">Building materials</div><h1 tabindex="-1">Building bricks and blocks</h1><p class="lead">Tell your branch the type and quantity you need. They will confirm sizes, stock, delivery and price.</p><form id="brick-form" class="panel" style="margin-top:18px;max-width:570px"><div class="quote-fields"><label class="field">Material<select name="product" required><option value="">Select material</option><option>Clay stock bricks</option><option>Maxi bricks</option><option>Concrete blocks</option><option>Face bricks</option><option>Other bricks or blocks</option></select></label><label class="field">Quantity<input name="qty" type="number" required min="1" max="10000000" step="1"></label><label class="field">Unit<select name="unit"><option>individual units</option><option>pallets</option></select></label><label class="field">Size or specification (optional)<input name="spec" maxlength="180"></label></div><button class="button navy" type="submit">Add to my list +</button></form>';
     $('brick-form').onsubmit=e=>{e.preventDefault();const v=inputData(e.target);addEntry({title:v.product,meta:v.qty+' '+v.unit,text:v.product+' — '+v.qty+' '+v.unit+(v.spec?' · '+v.spec:'')+'. Please confirm availability and price.',type:'General hardware'});location.hash='list';};
   }
-  window.addEventListener('storage',e=>{if(e.key!==savedKey)return;try{const incoming=JSON.parse(e.newValue||'[]');if(!Array.isArray(incoming))return;project=incoming.filter(validEntry);$('saved-count').textContent=project.length;if(!$('list-view').hidden&&!$('quote-dialog').open)renderList();}catch{}});
+  window.addEventListener('storage',e=>{if(e.key!==savedKey)return;try{const incoming=JSON.parse(e.newValue||'[]');if(!Array.isArray(incoming))return;project=restoreEntries(incoming);$('saved-count').textContent=project.length;if(!$('list-view').hidden&&!$('quote-dialog').open)renderList();}catch{}});
   $('saved-count').textContent=project.length;window.addEventListener('hashchange',()=>route(false));route(true);
 })();
