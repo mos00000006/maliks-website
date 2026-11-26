@@ -7,7 +7,7 @@
   const card=document.createElement('aside');
   card.id=scriptKey;
   card.className='pb-planner-promo';
-  card.innerHTML='<div><h2>Bill of Materials</h2><p>Estimate your materials or explore house plans before you request a branch quote.</p></div><a href="'+target+'">Open project planner <span aria-hidden="true">↗</span></a>';
+  card.innerHTML='<div><h2>Bill of Materials</h2><p>Choose your materials or a house plan and send your list to Sales for a quote.</p></div><a href="'+target+'">Open project planner <span aria-hidden="true">↗</span></a>';
   const section=$('#catalogue');
   if(section)section.before(card);
   else {const hero=$('main .hero');if(hero)hero.after(card);else return;}
@@ -38,13 +38,13 @@
   }
   const grid=$('#productGrid'), category=$('#categorySelect');
   if(grid&&category){
-    const a=document.createElement('a');a.href=target+'#bricks';a.className='pb-brick-quote';a.textContent='Request a price for building bricks or blocks ↗';grid.before(a);
+    const a=document.createElement('a');a.href=target+'#bricks';a.className='pb-brick-quote';a.textContent='Add building bricks or blocks to my list ↗';grid.before(a);
     const sync=()=>{const selected=category.value||new URLSearchParams(location.search).get('category')||'';a.hidden=!/bricks?\s*(?:and|&)\s*blocks?/i.test(selected);};
     sync();new MutationObserver(sync).observe(grid,{childList:true});category.addEventListener('change',sync);window.addEventListener('popstate',sync);
   }
   const drawer=$('#quoteItems'),copy=$('#copyQuote');
   if(drawer&&copy){
-    const b=document.createElement('button');b.type='button';b.className='pb-branch-quote';b.textContent='Request a price from my branch →';copy.before(b);
+    const b=document.createElement('button');b.type='button';b.className='pb-branch-quote';b.textContent='Review and send my list →';copy.before(b);
     const sync=()=>{b.disabled=!drawer.querySelector('.quote-line');};sync();new MutationObserver(sync).observe(drawer,{childList:true,subtree:true});
     b.onclick=()=>{
       const lines=Array.from(drawer.querySelectorAll('.quote-line')).map(row=>{
