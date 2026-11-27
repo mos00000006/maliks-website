@@ -142,7 +142,7 @@
     if (!text) return;
     let data;
     try { data=JSON.parse(text); } catch { return; }
-    if(typeof data.token!=='string'||typeof data.text!=='string'||!data.text.trim()||data.text.length>120000)return;
+    if(typeof data.token!=='string'||typeof data.text!=='string'||!data.text.trim()||data.text.length>1000000)return;
     const existing = project.find(e => e.transfer);
     if (existing) {
       existing.text = data.text;
@@ -172,7 +172,7 @@
       e.preventDefault();
       update();
       const subject = 'Quote request — '+branchChoice;
-      const body = 'Hello PowerBuild Sales,\r\n\r\nPlease send me a priced quotation for the list below.\r\n\r\n'+quoteText().replace(/\r?\n/g,'\r\n');
+      const body = 'Hello PowerBuild Sales,\r\n\r\nPlease send me a priced quotation for the list below.\r\n\r\n'+quoteText(true).replace(/\r?\n/g,'\r\n');
       const url = 'mailto:'+salesMailbox+'?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
       // Many mail apps truncate long mailto links. Keep the entire request in the web form.
       if (url.length > 1900) {
@@ -184,7 +184,13 @@
       location.href=url;
     };
   }
-  function quoteText(){return ['PowerBuild project quotation',branchChoice+' · '+methodChoice,'',...project.map((e,i)=>(i+1)+'. '+e.text+'\n'),extraNotes?'Project notes: '+extraNotes:''].filter((x,i)=>x!==''||i===2).join('\n').trim();}
+  function quoteText(compact=false) {
+    const entries=project.map((e,i)=>{
+      const value=compact && e.rows ? [e.title+' · '+e.meta,...e.rows.map(row=>row.label+' — '+row.order)].join('\n') : e.text;
+      return (i+1)+'. '+value+'\n';
+    });
+    return ['PowerBuild project quotation',branchChoice+' · '+methodChoice,'',...entries,extraNotes?'Project notes: '+extraNotes:''].filter((x,i)=>x!==''||i===2).join('\n').trim();
+  }
   function openQuote(){
     const dialog=$('quote-dialog'),frame=$('quote-frame'),fallback=$('quote-fallback'),message=$('quote-progress'),manual=$('handoff-copy');
     lastFocus=document.activeElement;
@@ -192,9 +198,16 @@
     frame.hidden=true;manual.hidden=true;$('copy-handoff').hidden=true;manual.value=quoteText();message.textContent='Opening your quotation form…';
     const localPreview=location.protocol==='file:' || (document.documentElement.dataset.preview==='true');
     const url=localPreview?'https://maliks.co.za/project-quote.html':new URL('project-quote.html',location.href).href;
-    fallback.href=url;
+    fallback.href=url;fallback.textContent='Open the full quotation form ↗';
     if(dialog.showModal)dialog.showModal();else dialog.setAttribute('open','');
     const showFallback=()=>{message.textContent='Copy your list below, then open the full quotation form and paste it under project requirements.';manual.hidden=false;$('copy-handoff').hidden=false;};
+    const showEmailFallback=()=>{
+      message.textContent='Copy the full list, open your email app below and paste it into your message to Sales.';
+      manual.hidden=false;$('copy-handoff').hidden=false;frame.hidden=true;
+      fallback.href='mailto:'+salesMailbox+'?subject='+encodeURIComponent('Quote request — '+branchChoice);
+      fallback.textContent='Open email to Sales ↗';
+    };
+    if(manual.value.length>12000){showEmailFallback();return;}
     if(localPreview){showFallback();return;}
     let observer,timer,applied=false;
     const stopWaiting=()=>{clearTimeout(timer);if(observer)observer.disconnect();};
@@ -206,6 +219,7 @@
       const fill=()=>{
         const items=doc.getElementById('pq-items'),branch=doc.getElementById('pq-branch'),method=doc.getElementById('pq-method'),type=doc.getElementById('pq-type');
         if(!items||!branch||!method||!type)return false;
+        if(items.maxLength>0 && manual.value.length>items.maxLength){applied=true;stopWaiting();showEmailFallback();return true;}
         const kinds=new Set(project.map(e=>e.type));
         for(const [control,value] of [[branch,branchChoice],[method,methodChoice],[type,kinds.size===1?project[0].type:'Other project'],[items,manual.value]]){
           control.value=value;control.dispatchEvent(new Event('input',{bubbles:true}));control.dispatchEvent(new Event('change',{bubbles:true}));
@@ -226,8 +240,9 @@
   function finishQuote(){if(quoteCleanup)quoteCleanup();$('quote-frame').removeAttribute('src');$('quote-frame').hidden=true;if(lastFocus&&lastFocus.isConnected)lastFocus.focus();}
   $('copy-handoff').onclick=async()=>{
     const box=$('handoff-copy');
-    try { await navigator.clipboard.writeText(box.value); $('quote-progress').textContent='Materials list copied. Paste it into the full quotation form.'; }
-    catch { box.focus();box.select();$('quote-progress').textContent='Your list is selected. Use Copy, then paste it into the full quotation form.'; }
+    const target=$('quote-fallback').href.startsWith('mailto:')?'your email to Sales':'the full quotation form';
+    try { await navigator.clipboard.writeText(box.value); $('quote-progress').textContent='Materials list copied. Paste it into '+target+'.'; }
+    catch { box.focus();box.select();$('quote-progress').textContent='Your list is selected. Use Copy, then paste it into '+target+'.'; }
   };
   $('close-dialog').onclick=closeQuote;$('quote-dialog').addEventListener('close',finishQuote);
   document.querySelectorAll('[data-group]').forEach(b=>{b.onclick=()=>{const g=b.dataset.group;const slug=Object.keys(groupsBySlug).find(k=>groupsBySlug[k]===g);location.hash=slug?'group/'+slug:'templates';};});
